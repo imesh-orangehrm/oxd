@@ -1,3 +1,5 @@
+2024-11-13 - 52366879d1e5cf23bc23ebd47a2b65c4fbf7b903 - TinyMce/TinyMce.vue - emit editor instance
+
 2024-09-12 - 80222890b5422b9913bc84a4e8dff1831b7272f9 - Icon/icons.ts - Add oxd-outline-drip-dry icon
 
 2024-08-02 - 2529c40ce428a16f6ef2f062b13797ac856a95c9 - components/ListTable/ListTable.vue - Fix rows flashing while loading issue
