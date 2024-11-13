@@ -1,5 +1,33 @@
 2024-11-13 - 52366879d1e5cf23bc23ebd47a2b65c4fbf7b903 - TinyMce/TinyMce.vue - emit editor instance
 
+2024-11-11 - 30e71393cff4e116c842c56bf35ef84bd659448d - components/Icon/icons.ts - Add oxd-on-leave,oxd-holiday,oxd-disabled-url,oxd-generate-link,oxd-enable-url icons
+
+2024-11-11 - 30e71393cff4e116c842c56bf35ef84bd659448d - components/Input/CheckboxInput.vue, components/Input/CheckboxInput.vue - Add a border prop to enable borders for the checkbox and an optionInfoIconPosition prop to adjust optional icon position.
+
+2024-11-08 - cca468f6ad704248ff1de9f34672f3cf29d516e2 - components/CardTable/Cell/LinkWithPill.vue -  header pass as props
+
+2024-11-07 - 897c614bb977f6e559e717ad0a69a0bce5869183 - components/Tabs/Tabs.vue - Add tooltip to tab icon when title is absent
+
+2024-11-01 - d9cb67f8abf3c1128203f14bce687c8b5b4075a6 - components/Pagination/Pagination.vue - Remove unnecessary separator between consecutive page numbers in OXD pagination
+
+2024-11-01 - 5f4c5306a8ec4b497cb824fa673e50ac0162af4b - ProfilePicture.vue, ProfilePic.vue, profile-pic.spec.ts- add onclick event to prevent default behaviour of link and execute a function fix issue
+
+2024-11-01 - 891d531ac92cf7e3bcced8c018a7f7fd2efe6bb9 - Icons.ts - add external link icon
+
+2024-10-28 - e5840791366e3abbf3cb6b57f77ede4a8842fb79 - Icon/icons.ts - Add oxd-date-input, oxd-attachment-input,oxd-checkbox-input, oxd-checkbox-group-input, oxd-select-input, oxd-file-input, oxd-radio-input, oxd-radio-group-input, oxd-switch-input, oxd-time-input, oxd-text-input, oxd-password-input, oxd-circle-plus, oxd-textbox, oxd-text, oxd-divider, oxd-grid, oxd-grid-item, oxd-subform, oxd-masterdata, oxd-employee-autocomplete, oxd-status, oxd-required to OXD Icons
+
+2024-10-26 - a7f234223a3a34e55a77e3c216733c9f01e5e3c9 - directives/focus-first-element/index.ts - Update the focus first directive to wait for animations to stop
+
+2024-10-25 - 0ba4cd7666f48d5e702ff930ec39f43f203bc4bc -Input/PasswordInput.vue - Updating password Input field
+
+2024-10-22 - 84b7f4bfe4893a54c8bd281e10feda17a2356abd -Icon/icons.ts - Added new icon as oxd-open-new-tab
+
+2024-10-18 - 59c22c85b1256cc167408e93402f6fb85a3bb775 -Input/PasswordInput.vue - Updating password Input field
+
+2024-10-03 - 15c4f9e5f2459055c23bae0bdc1afa6590321950 - Icon/icons.ts - Added preboarding feature related icons list
+
+2024-09-26 - a459c2c09ae2ddb76a3c38fe5cf26b3e98eb7c98 - composables/useFormValidation.ts - Fix form validation error not removed when field is toggled
+
 2024-09-12 - 80222890b5422b9913bc84a4e8dff1831b7272f9 - Icon/icons.ts - Add oxd-outline-drip-dry icon
 
 2024-08-02 - 2529c40ce428a16f6ef2f062b13797ac856a95c9 - components/ListTable/ListTable.vue - Fix rows flashing while loading issue
