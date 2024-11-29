@@ -1,8 +1,19 @@
 <template>
   <div class="oxd-html-editor" :class="classes">
-    <editor :id="id" v-model="editorValue" :init="processedSettings" :disabled="disabled" @selectionChange="onInput"
-      @blur="onBlur" />
-    <input v-show="false" :id="`tinymce-input-${tinymceId}`" type="file" @change="onChangeFile" />
+    <editor
+      :id="id"
+      v-model="editorValue"
+      :init="processedSettings"
+      :disabled="disabled"
+      @selectionChange="onInput"
+      @blur="onBlur"
+    />
+    <input
+      v-show="false"
+      :id="`tinymce-input-${tinymceId}`"
+      type="file"
+      @change="onChangeFile"
+    />
     <div class="tinymce-helper-text">
       {{ $vt('Press Shift + Enter for a new line') }}
     </div>
@@ -10,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRefs, PropType, computed, watch } from 'vue';
+import {defineComponent, ref, toRefs, PropType, computed, watch} from 'vue';
 
 // TinyMCE
 import 'tinymce/tinymce';
@@ -39,7 +50,7 @@ import 'tinymce/plugins/wordcount/plugin';
 import 'tinymce/plugins/contextmenu/plugin';
 import 'tinymce/plugins/wordcount/plugin';
 import Editor from '@tinymce/tinymce-vue';
-import { nanoid } from 'nanoid';
+import {nanoid} from 'nanoid';
 import translateMixin from '../../../mixins/translate';
 
 import * as contentUiCssURL from '!!raw-loader!./skins/lightgray/content.module.css';
@@ -88,8 +99,8 @@ export default defineComponent({
     },
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setup(props: any, { emit }: any) {
-    const { modelValue } = toRefs(props);
+  setup(props: any, {emit}: any) {
+    const {modelValue} = toRefs(props);
     const editorValue = ref(modelValue.value);
     const seonderyTooltbar = ref();
     const fileInput = ref();
@@ -143,7 +154,7 @@ export default defineComponent({
               '<img src="' + reader.result + '"/>',
             );
           };
-          reader.onerror = (error: any) => { };
+          reader.onerror = (error: any) => {};
         };
 
         setTinymceBackGroundImage.value = (file: File) => {
