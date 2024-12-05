@@ -105,7 +105,7 @@ export default defineComponent({
     const seonderyTooltbar = ref();
     const fileInput = ref();
     const setTinymceImage = ref();
-    const setTinymceBackGroundImage = ref();
+    let setTinymceBackGroundImage;
     const tinymceImageTypeValidator = ref();
     const tinymceImageSizeValidator = ref();
     const tinymceId = ref<string>(`oxd-html-editor-${nanoid(6)}`);
@@ -157,7 +157,7 @@ export default defineComponent({
           reader.onerror = (error: any) => {};
         };
 
-        setTinymceBackGroundImage.value = (file: File) => {
+        setTinymceBackGroundImage = (file: File) => {
           imageUploadForBackgound.value = false;
           const reader = new FileReader();
           reader.readAsDataURL(file);
@@ -325,7 +325,7 @@ export default defineComponent({
         tinymceImageSizeValidator.value(files[0])
       ) {
         if (imageUploadForBackgound.value) {
-          setTinymceBackGroundImage.value(files[0]);
+          setTinymceBackGroundImage && setTinymceBackGroundImage(files[0]);
         } else {
           setTinymceImage.value(files[0]);
         }
