@@ -1,3 +1,5 @@
+2024-12-05 - c041308720a8cf73b879a431e97ff08f997df0a8 - TinyMce/TinyMce.vue - add background image and remove image option  
+
 2024-11-25 - 8f72e7876778929c8f86de9e50362f71c04a6133 - components/Collapsible.vue - getting tooltip flow attribute as a props
 
 2024-11-13 - 52366879d1e5cf23bc23ebd47a2b65c4fbf7b903 - TinyMce/TinyMce.vue - emit editor instance
