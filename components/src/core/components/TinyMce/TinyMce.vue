@@ -189,6 +189,7 @@ export default defineComponent({
               }
               editor.setContent('');
               editor.execCommand('mceReplaceContent', false, newContent);
+              clearInputField();
             }
           };
           reader.onerror = (error: any) => { };
@@ -201,7 +202,7 @@ export default defineComponent({
               if (typeof editor.image_size_error === 'function') {
                 editor.image_size_error();
               }
-              imageUploadForBackgound.value = false;
+              clearInputField();
               return false;
             }
             return true;
@@ -221,6 +222,7 @@ export default defineComponent({
                 editor.image_type_error();
               }
               imageUploadForBackgound.value = false;
+              clearInputField();
               return false;
             }
             return true;
@@ -257,11 +259,24 @@ export default defineComponent({
           }
         });
 
+        const clearInputField = () => {
+          let inputField= document.querySelector(
+              `#tinymce-input-${tinymceId.value}`,
+          );
+          if(inputField){
+            const parent = inputField.parentNode;
+            const newFileInput = inputField.cloneNode(true); // Clone the original input
+            newFileInput.value = ''; // Ensure the new input is reset
+            parent.replaceChild(newFileInput, inputField);
+          }
+        }
+
         const removeTinymceBackgroundImage = () => {
           let existingContent = editor.getContent();
           let tempDiv = document.createElement('div');
           tempDiv.innerHTML = existingContent;
-          if (tempDiv.firstChild?.classList.contains('background-image')) {
+          if (tempDiv.firstChild?.classList.contains('background-image') ||
+              (tempDiv.firstChild?.nodeType === 1 && tempDiv.firstChild?.style.backgroundImage && tempDiv.firstChild?.style.backgroundImage !== 'none')) {
             let existingChildren = '';
             const children = tempDiv.firstChild.children;
 
