@@ -1,3 +1,5 @@
+2025-01-29 - 8cb864265057b8bcc69f131663eae4cd56649814 - components/src/core/components/Input/CheckboxInput.vue - Add localization to the options label
+
 2025-01-17 - 00972872186d9b9dd80c1365d16c716d28f1859f - components/src/core/components/Icon/icons.ts - Add oxd-summary-report and oxd-detailed-report icons
 
 2024-12-16 - f255b3c85791e055d3e20ac17da329997382ab17 - components/src/styles/_utility.scss - Reduce the max-width of system tooltips to 200px
