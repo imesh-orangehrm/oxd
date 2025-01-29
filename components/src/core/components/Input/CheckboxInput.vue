@@ -22,7 +22,7 @@
       </template>
       <template v-if="labelPosition === 'left'">
         <div class="oxd-checkbox-option-label">
-          {{ optionLabel }}
+          {{ $vt(optionLabel) }}
         </div>
       </template>
       <input
@@ -51,7 +51,7 @@
       </span>
       <template v-if="labelPosition === 'right'">
         <div class="oxd-checkbox-option-label">
-          {{ optionLabel }}
+          {{ $vt(optionLabel) }}
         </div>
       </template>
       <template v-if="optionInfoIcon && optionInfoIconPosition === 'right'">
