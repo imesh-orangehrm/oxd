@@ -1,0 +1,141 @@
+@import '../../../styles/_colors.scss';
+@import './_variables.scss';
+
+.oxd-wizard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    container-type: inline-size;
+    container-name: wizard;
+
+    &-tab {
+        display: flex;
+        align-items: center;
+        background-color: $oxd-background-pastel-white-color;
+        width: $oxd-wizard-tab-width-default;
+
+        @container wizard (max-width: 1200px) {
+            width: $oxd-wizard-tab-width-1200;
+        }
+
+        @container wizard (max-width: 960px) {
+            width: $oxd-wizard-tab-width-960;
+        }
+
+        @container wizard (max-width: 720px) {
+            width: $oxd-wizard-tab-width-720;
+
+            &:last-child {
+                width: $oxd-wizard-tab-width-720-last;
+            }
+
+            .oxd-wizard-tab-title-container {
+                display: none;
+            }
+
+            .oxd-wizard-tab-circle-tooltip {
+                display: block;
+                cursor: pointer;
+
+                &.--not-clickable {
+                    cursor: default;
+                }
+            }
+
+            &[tooltip]::before,
+            &[tooltip]::after {
+                display: none;
+            }
+        }
+
+        &:first-child {
+            border-radius: $oxd-wizard-tab-border-radius 0 0 $oxd-wizard-tab-border-radius;
+        }
+
+        &:last-child {
+            border-radius: 0 $oxd-wizard-tab-border-radius $oxd-wizard-tab-border-radius 0;
+        }
+
+        &-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: $oxd-wizard-tab-circle-size;
+            min-height: $oxd-wizard-tab-circle-size;
+            border-radius: $oxd-wizard-tab-circle-border-radius;
+            position: relative;
+
+            &-tooltip {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            &-button {
+                &.--active {
+                    color: $oxd-background-pastel-white-color;
+                    background-color: rgba(118, 188, 33, 0.6);
+
+                    &:hover {
+                        color: $oxd-background-pastel-white-color;
+                        background-color: rgba(118, 188, 33, 0.8);
+                    }
+
+                    &:focus {
+                        color: $oxd-background-pastel-white-color;
+                        background-color: rgba(118, 188, 33, 0.9);
+                    }
+                }
+
+                &:disabled {
+                    color: rgba(100, 114, 140, 0.3);
+                    background-color: rgba(100, 114, 140, 0.1);
+                    cursor: not-allowed;
+                    pointer-events: none;
+                }
+
+                &.--not-clickable {
+                    z-index: 1;
+                    cursor: default;
+                    pointer-events: none;
+                }
+            }
+        }
+
+        &-title-container {
+            transition: width 0.3s;
+            margin-left: $oxd-wizard-tab-margin;
+            margin-right: $oxd-wizard-tab-margin;
+            max-width: 100%;
+            overflow: hidden;
+
+            &--title {
+                width: 100%;
+                font-weight: 800;
+                font-size: 14px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                cursor: pointer;
+
+                &.--active {
+                    color: $oxd-secondary-four-color;
+                }
+
+                &.--disabled {
+                    color: rgba(100, 114, 140, 0.3);
+                    cursor: not-allowed;
+                    pointer-events: none;
+                }
+
+                &.--not-clickable {
+                    cursor: default;
+                    pointer-events: none;
+                }
+            }
+        }
+    }
+}

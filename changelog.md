@@ -1,16 +1,26 @@
 2025-06-26 - 0ce8d51eeb6014ed5a5b194e6168896d864af1a4 - components/src/core/components/Icon/icons.ts - oxdCopy icon button style changes
 
+2025-06-20 - 253a55178b74b48bc1db417ef2f1fd5e3d5a03bb - components/src/core/components/Icon/icons.ts - Added icons : oxd-saving, oxd-save-error
+
+2025-06-20 - 817afecb8a122d851d455358f60c8b5e1a912fad - components/src/core/components/Icon/icons.ts - Added icons : oxd-application-received , oxd-shortlisted , oxd-interview , oxd-test , oxd-hired , oxd-job-offer , oxd-expand , oxd-collapse , oxd-auto-save
+
 2025-06-05 - 42563da35f05e286119f1e37dda743f052937984 - components/src/core/components/Input/TreeSelect/TreeSelect.vue - select only not disabled options when selecting all otpions.
 
 2025-06-03 - 0058934f5b717d01998650a25366529f777eec72 - components/src/composables/useFlashing.ts, components/src/core/components/ListTable/ListTable.vue - Add support to ignore specific attributes when detecting flash rows
 
 2025-06-02 - a6453107053cbee9b7ea128460507c535c10a4dd - components/src/core/components/Icon/icons.ts, components/src/core/components/CardTable/Cell/ProfilePicture.vue - Added oxd-past-employee icon and added secondary icon button in to the ProfilePicture component
 
+2025-05-27 - 69c989e9faeb39cdbecb2873a0dea9aa9645b4fb - components/src/core/components/Icon/icons.ts - Added icon : oxd-duplicate
+
+2025-05-21 - 196352bfc706fdb456effebe87224c47b0a7ae90 - components/src/core/components/Icon/icons.ts - Added icons : oxd-application-form, oxd-drag-icon-vertical, oxd-description, oxd-posting, oxd-smart-screen, oxd-view-info, oxd-workflow
+
 2025-05-14 - 511762a38749a9a04bf3c855f7bb41bae9405920 - components/src/core/components/Icon/icons.ts - Added oxd-citra-new-chat icon
 
 2025-05-09 - cd602f0751162656a10875d3042de4e855895677 - components/src/core/components/Icon/icons.ts - Added oxd-section icon
 
 2025-05-05 - b9c9c21bde995468e8051a4eb55abf89d341ab3d - components/Input/Select/SelectInput.vue - Added a new prop called translateOptions to prevent the translation of the select component's options
+
+2025-04-18 - cca89d5ee4a51cfd6c1c764a416f1370a346f8ee - Added OXD Wizard component : components/src/core/components/Wizard/Wizard.vue, components/src/core/components/Wizard/Wizard.scss, components/src/core/components/Wizard/types.ts
 
 2025-04-04 - a34df128b3a2568a8d02ef3c5b169b261d923316 - components/src/core/components/CardTable/Cell/Dropdown.vue - Added tabindex to dropdown items to support keyboard accessiblity
 
