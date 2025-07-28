@@ -3,6 +3,7 @@ import SelectInputEvents from './SelectInputEvents.story.vue';
 import SelectInputAfterSelect from './SelectInputAfterSelect.story.vue';
 import {h, ref} from 'vue';
 import SelectInputCustomSelectStory from './SelectInputCustomSelect.story.vue';
+import SelectInputTopOfInputStory from './SelectInputTopOfInput.story.vue';
 
 export default {
   title: 'Inputs/SelectInput',
@@ -89,6 +90,7 @@ export default {
       defaultValue: [],
       table: {
         type: {summary: 'Interal Slot to manage option'},
+        category: 'Slots',
       },
     },
     afterSelected: {
@@ -96,6 +98,15 @@ export default {
       defaultValue: [],
       table: {
         type: {summary: 'Attend a specific text to the end of the select'},
+        category: 'Slots',
+      },
+    },
+    topOfInput: {
+      control: {type: 'text'},
+      defaultValue: '',
+      table: {
+        type: {summary: 'Inline label displayed above the input content'},
+        category: 'Slots',
       },
     },
     isLoading: {
@@ -156,13 +167,20 @@ const Template = (args) => ({
     return {args, selected};
   },
   render() {
+    const slots = {};
+    
+    // Add topOfInput slot if provided
+    if (this.args.topOfInput) {
+      slots.topOfInput = () => this.args.topOfInput;
+    }
+    
     return h(SelectInput, {
       ...this.args,
       modelValue: this.selected,
       'onUpdate:modelValue': (value) => {
         this.selected = value;
       },
-    });
+    }, slots);
   },
 });
 
@@ -356,6 +374,34 @@ CustomTemplate.parameters = {
         '</oxd-select>"\n' +
         '//\n' +
         'File -> SelectInputCustomSelect.story.vue',
+    },
+  },
+};
+
+export const TopOfInputCustom = () => SelectInputTopOfInputStory;
+
+TopOfInputCustom.parameters = {
+  docs: {
+    source: {
+      code:
+        '<oxd-select :options="options" v-model="value">\n' +
+        '<template v-slot:topOfInput>\n' +
+        '  <span class="top-of-input-label">Location</span>\n' +
+        '</template>\n' +
+        '</oxd-select>\n\n' +
+        '<style scoped>\n' +
+        '.top-of-input-label {\n' +
+        '  position: absolute;\n' +
+        '  top: 6px;\n' +
+        '  left: 8px;\n' +
+        '  font-size: 11px;\n' +
+        '  color: #6c757d;\n' +
+        '  font-weight: 400;\n' +
+        '  z-index: 1;\n' +
+        '  pointer-events: none;\n' +
+        '  line-height: 1;\n' +
+        '}\n' +
+        '</style>',
     },
   },
 };
