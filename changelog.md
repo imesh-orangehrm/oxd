@@ -1,3 +1,5 @@
+2025-09-19 - 90636c51312cc3ff8cdc87298c43471b20cdff4a - components/src/core/components/Icon/icons.ts - Add oxd-print icon
+
 2025-08-22- 390b3a08bddd39d4511c8a1ffd1bf3dd2e90b7c1 - components/src/core/components/Input/Autocomplete/AutocompleteInput.vue - Pass selected options to createOptions function enabling developers to filter already selected options
 
 2025-08-19 - 3dc9a8853d02cb4d9fafa12986b9234ffb8d42a8 - components/src/core/components/Icon/icons.ts - Added icons : oxd-multi-user-2, oxd-logs-list, oxd-created-date, oxd-modified-date
