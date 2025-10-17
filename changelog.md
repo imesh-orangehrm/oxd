@@ -1,3 +1,5 @@
+2025-10-17 - 878e013fe00284ce969d810db31eb71f9155c7eb - components/src/core/components/Input/Select/events-mixin.ts - Fixed Dropdown Scroll Behavior to Prevent Parent Container Scrolling
+
 2025-10-16 - be4112ff7db4c4b376e3cef04ec0c0275464841e - components/src/core/components/Input/Select/events-mixin.ts - Change scrollToView behaviour as auto.
 
 2025-10-16 - ba91e7ae77499398f5a15471901d329102ac1cae - components/src/core/components/Input/Select/SelectInput.vue, components/src/core/components/Input/Select/events-mixin.ts - Enhanced dropdown component to auto-scroll to the selected option and add a new prop called scrollToOption to auto-scroll to given specific option. 
