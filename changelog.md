@@ -1,3 +1,5 @@
+2025-10-20 - a28c4b893782bbd13ff491d37ee06622062dd5e4 - components/src/core/components/Icon/icons.ts - Added icons : oxd-dollar-symbol
+
 2025-10-17 - 878e013fe00284ce969d810db31eb71f9155c7eb - components/src/core/components/Input/Select/events-mixin.ts - Fixed Dropdown Scroll Behavior to Prevent Parent Container Scrolling
 
 2025-10-16 - be4112ff7db4c4b376e3cef04ec0c0275464841e - components/src/core/components/Input/Select/events-mixin.ts - Change scrollToView behaviour as auto.
