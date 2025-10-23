@@ -6,9 +6,10 @@ interface State {
   pointer: number;
 }
 
-const cycleIndexes = (currentValue: number, array: number[]) => {
-  const currentIndex = array.indexOf(currentValue);
-  return array[(currentIndex + 1) % array.length];
+const cycleIndexes = (lastIndex: number, array: number[]) => {
+  const currentFilteredIndex = array.indexOf(lastIndex);
+  const nextFilteredIndex = (currentFilteredIndex + 1) % array.length;
+  return array[nextFilteredIndex];
 };
 
 export const navigationMixin = defineComponent({
@@ -70,13 +71,20 @@ export const navigationMixin = defineComponent({
     onKeypress($e: KeyboardEvent) {
       if ($e.key.length > 1) return; // Filter one letter keypress only
       if (this.disabled || this.readonly) return;
+      const key = $e.key.toLowerCase();
       const filtered = this.computedOptions.flatMap((item: Option, i: number) =>
-        item.label.toLowerCase().startsWith($e.key) && !item._disabled ? i : [],
+        item.label.toLowerCase().startsWith(key) && !item._disabled ? i : [],
       );
       if (filtered.length > 0) {
-        this.pointer = cycleIndexes(this.pointer, filtered);
+        if (filtered.includes(this.pointer)) {
+          this.pointer = cycleIndexes(this.pointer, filtered);
+        } else {
+          this.pointer = filtered[0];
+        }
+
         const option = this.computedOptions[this.pointer];
-        if (!option?._selected && !option?._disabled) this.onSelect(option);
+        if (!option?._selected && !option?._disabled)
+          this.onSelect(option, true);
       }
     },
 
@@ -86,7 +94,7 @@ export const navigationMixin = defineComponent({
       this.$emit('dropdown:opened');
     },
     /* eslint-disable */
-    onSelect(option: Option) {},
+    onSelect(option: Option, keepOpen: boolean = false) {},
     /* eslint-enable */
   },
   computed: {

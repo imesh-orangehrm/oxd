@@ -112,6 +112,9 @@ export default defineComponent({
     onPageUp(e: KeyboardEvent) {
       (e.target as HTMLInputElement).setSelectionRange(0, 0);
     },
+    onKeypress(e: KeyboardEvent) {
+      return;
+    },
   },
 });
 </script>
