@@ -24,6 +24,7 @@
     </oxd-select-text>
 
     <oxd-select-dropdown
+      ref="dropdownRef"
       v-dropdown-direction
       v-if="dropdownOpen"
       :class="dropdownClasses"
@@ -161,8 +162,15 @@ export default defineComponent({
 
   watch: {
     pointer(newIndex: number) {
-      const option = this.$refs[`option-${newIndex}`];
-      if (option?.$el) this.scrollToView(option.$el);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let option = this.$refs[`option-${newIndex}`] as any;
+      if (Array.isArray(option)) {
+        option = option[0];
+      }
+      const el = option?.$el || option;
+      if (el) {
+        this.scrollToView(el);
+      }
     },
   },
 });
