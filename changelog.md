@@ -1,3 +1,5 @@
+2025-11-30 - 30957e24f2be744d6a1987c8951e1b083b0a57c5 - components/src/core/components/Icon/icons.ts - Add oxd-swap icon
+
 2025-11-25 - eb7604886ab6816c6b0939385d6157eb53a2cb85 - components/src/core/components/TinyMce/skins/lightgray/content.module.css -  Added Arial as default font for TinyMce
 
 2025-11-19 - dfead436dde5cc128316cb99b802ebd4704fe7b6 - components/src/core/components/Input/MultiSelect/MultiSelectInput.vue - Support keyboard navigation of options
