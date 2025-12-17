@@ -115,6 +115,53 @@
       pointer-events: none;
       transform: none;
     }
+
+    &.--strict-blackout, &.--warning-blackout, &.--strict-blackout-disabled {      
+      .oxd-calendar-date-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: $oxd-calendar-blackout-icon-size;
+        height: $oxd-calendar-blackout-icon-size;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        color: $oxd-calendar-blackout-icon-color;
+        z-index: 1;
+      }
+    }
+
+    &.--strict-blackout {
+      position: relative;
+      color: $oxd-calendar-strict-blackout-color;
+      background-color: $oxd-calendar-strict-blackout-background-color;
+      &-disabled {
+        cursor: not-allowed;
+        pointer-events: none;
+        color: $oxd-calendar-strict-blackout-text-disabled-color;
+        background-color: $oxd-calendar-strict-blackout-background-color;
+        .oxd-calendar-date-icon {
+          color: $oxd-calendar-strict-blackout-icon-disabled-color;
+        }
+      }
+    }
+
+    &.--warning-blackout {
+      position: relative;
+      background-color: $oxd-calendar-warning-blackout-background-color;
+      color: $oxd-calendar-warning-blackout-color;
+      font-weight: 700;
+    }
+
+    &.--strict-blackout, &.--warning-blackout {
+      &.--selected {
+        background-color: $oxd-calendar-date-selected-background-color;
+        color: $oxd-calendar-date-selected-font-color;
+        font-weight: $oxd-calendar-date-selected-font-weight;
+      }
+    }
   }
 
   &-dates-grid .oxd-calendar-date-wrapper:nth-child(-n + 7),
@@ -128,6 +175,12 @@
     .oxd-calendar-date {
     border-bottom-left-radius: $oxd-calendar-date-border-radius;
     border-bottom-right-radius: $oxd-calendar-date-border-radius;
+  }
+
+  // Override tooltip text alignment for calendar dates
+  &-date-wrapper[tooltip]::after {
+    text-align: left;
+    max-width: 300px;
   }
 
   &-selector {

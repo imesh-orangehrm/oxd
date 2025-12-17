@@ -12,7 +12,7 @@ import {
   formatDate,
 } from '../../../utils/date';
 import {enGB} from 'date-fns/locale';
-import {CalendarDayAttributes, CalendarEvent} from './types';
+import {CalendarDayAttributes, CalendarEvent, STRICT_BLACKOUT} from './types';
 import {
   computed,
   defineComponent,
@@ -239,7 +239,9 @@ export default defineComponent({
           {class: 'oxd-calendar-dates-grid'},
           this.datesOfMonth.map((date: Date, i: number) => {
             let disabledDate = false;
-            if (this.max && this.min) {
+            if (this.parsedEvents[i] && this.parsedEvents[i].type === STRICT_BLACKOUT && this.parsedEvents[i].class === '--strict-blackout-disabled') {
+              disabledDate = true;
+            } else if (this.max && this.min) {
               disabledDate =
                 isAfter(
                   formatDate(date, 'yyyy-MM-dd'),
