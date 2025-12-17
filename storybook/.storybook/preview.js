@@ -1,4 +1,5 @@
 import { MINIMAL_VIEWPORTS } from "@storybook/addon-viewport";
+import '../../components/src/styles/global.scss';
 
 // https://storybook.js.org/docs/react/essentials/viewport
 const customViewports = {
