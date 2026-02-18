@@ -7,9 +7,7 @@
       v-bind="$attrs"
       :disabled="disabled"
       :readonly="readonly"
-      :value="
-        getPlaceholderValue() + (selectedIdsLengthComputed > 1 ? ',' : '')
-      "
+      :value="displayValue"
       :placeholder="placeholder"
       :dropdownOpened="dropdownOpen"
       @blur="onBlur"
@@ -24,7 +22,7 @@
         <slot name="topOfInput"></slot>
       </template>
       <template #afterInput>
-        <div v-if="selectedIdsLengthComputed > 1" class="selected-count-chip">
+        <div v-if="selectedIdsLengthComputed > 1 && !(allSelectedText && isAllSelected)" class="selected-count-chip">
           <oxd-chip
             v-if="String(selectedIdsLengthComputed - 1).length == 1"
             :label="'&nbsp;' + '+' + (selectedIdsLengthComputed - 1) + '&nbsp;'"
@@ -160,6 +158,7 @@
 import {computed, defineComponent, ref, PropType, watch} from 'vue';
 
 import SelectText from '../Select/SelectText.vue';
+import useTranslate from '../../../../composables/useTranslate';
 import SelectDropdown from '../Select/SelectDropdown.vue';
 import IconVue from '../../Button/Icon.vue';
 import CheckboxInputVue from '../CheckboxInput.vue';
@@ -254,6 +253,13 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    allSelectedText: {
+      type: String,
+      default: '',
+      validator: function(value: string) {
+        return value.length <= 100;
+      },
+    },
     dropdownPosition: {
       type: String,
       default: BOTTOM,
@@ -264,6 +270,7 @@ export default defineComponent({
   },
 
   setup: function(props, {emit}) {
+    const {$t} = useTranslate();
     const selectedIdsObject = ref<IdsObject>({});
     const expandedIdsObject = ref<IdsObject>({});
     const optionsArr = ref<Option[]>([]);
@@ -688,6 +695,13 @@ export default defineComponent({
       return placeholderString;
     };
 
+    const displayValue = computed(() => {
+      if (props.allSelectedText && isAllSelected.value) {
+        return $t(props.allSelectedText);
+      }
+      return getPlaceholderValue() + (selectedIdsLengthComputed.value > 1 ? ',' : '');
+    });
+
     const keyUpEnterOnCheckbox = ($e: KeyboardEvent, option: Option) => {
       $e.stopPropagation();
       selectOptionOnlabelClick(option);
@@ -769,6 +783,7 @@ export default defineComponent({
       isAllSelected,
       expandedIdsObject,
       selectedIdsLengthComputed,
+      displayValue,
       getOptionLabelStyle,
       selectOptionsOnCheckbox,
       expandIconClicked,
