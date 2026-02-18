@@ -1,6 +1,7 @@
-import {mount} from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import TreeSelect from '@orangehrm/oxd/core/components/Input/TreeSelect/TreeSelect.vue';
-import {BOTTOM} from '@orangehrm/oxd/core/components/Input/types';
+import { BOTTOM } from '@orangehrm/oxd/core/components/Input/types';
+import { OptionProp } from '@orangehrm/oxd/core/components/Input/TreeSelect/type';
 
 const options = [
   {
@@ -37,7 +38,7 @@ const options = [
 describe('TreeSelect.vue', () => {
   it('renders OXD Tree Select', () => {
     const wrapper = mount(TreeSelect, {
-      props: {options},
+      props: { options },
     });
     expect(wrapper.html()).toMatchSnapshot();
   });
@@ -391,5 +392,162 @@ describe('TreeSelect.vue', () => {
     const customLabel = inlineLabel.find('.custom-label');
     expect(customLabel.exists()).toBe(true);
     expect(customLabel.text()).toBe('Custom Inline Label');
+  });
+
+  describe('allSelectedText prop', () => {
+    const getAllOptionIds = (opts: OptionProp[]): string[] => {
+      const ids: string[] = [];
+      opts.forEach(opt => {
+        ids.push(String(opt.id));
+        if (opt.children) {
+          ids.push(...getAllOptionIds(opt.children));
+        }
+      });
+      return ids;
+    };
+
+    it('should display custom text when allSelectedText is set and all options are selected', async () => {
+      const allIds = getAllOptionIds(options);
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+          allSelectedText: 'All',
+          modelValue: allIds,
+        },
+        global: {
+          mocks: {
+            $vt: (key: string) => key,
+          },
+        },
+      });
+      await wrapper.vm.$nextTick();
+
+      const selectText = wrapper.findComponent({ name: 'oxd-select-text' });
+      expect(selectText.props('value')).toBe('All');
+    });
+
+    it('should not display custom text when allSelectedText is empty string even if all options are selected', async () => {
+      const allIds = getAllOptionIds(options);
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+          allSelectedText: '',
+          modelValue: allIds,
+        },
+        global: {
+          mocks: {
+            $vt: (key: string) => key,
+          },
+        },
+      });
+      await wrapper.vm.$nextTick();
+
+      const selectText = wrapper.findComponent({ name: 'oxd-select-text' });
+      expect(selectText.props('value')).not.toBe('All');
+      expect(selectText.props('value')).toBe('Parent 1,');
+    });
+
+    it('should not display custom text when allSelectedText is set but not all options are selected', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+          allSelectedText: 'All',
+          modelValue: ['1', '1-1'],
+        },
+        global: {
+          mocks: {
+            $vt: (key: string) => key,
+          },
+        },
+      });
+      await wrapper.vm.$nextTick();
+
+      const selectText = wrapper.findComponent({ name: 'oxd-select-text' });
+      expect(selectText.props('value')).not.toBe('All');
+      expect(selectText.props('value')).toBe('Parent 1,');
+    });
+
+    it('should hide count chip when allSelectedText is set and all options are selected', async () => {
+      const allIds = getAllOptionIds(options);
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+          allSelectedText: 'All',
+          modelValue: allIds,
+        },
+      });
+      await wrapper.vm.$nextTick();
+
+      const chip = wrapper.find('.selected-count-chip');
+      expect(chip.exists()).toBe(false);
+    });
+
+    it('should show count chip when allSelectedText is set but not all options are selected', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+          allSelectedText: 'All',
+          modelValue: ['1', '1-1', '1-2'],
+        },
+      });
+      await wrapper.vm.$nextTick();
+
+      const chip = wrapper.find('.selected-count-chip');
+      expect(chip.exists()).toBe(true);
+    });
+
+    it('should still emit correct modelValue when allSelectedText is set and all options are selected', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+          allSelectedText: 'All',
+        },
+      });
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      const selectAllCheckbox = wrapper.find(
+        '.all-checkbox-div .oxd-checkbox-input',
+      );
+      await selectAllCheckbox.trigger('click');
+      await wrapper.vm.$nextTick();
+
+      const selectedIds = (wrapper.emitted(
+        'update:modelValue',
+      ) as string[][])[0][0];
+      // Should contain all selectable option IDs (excluding disabled ones)
+      expect(selectedIds).toContain('1');
+      expect(selectedIds).toContain('1-1');
+      expect(selectedIds).toContain('1-1-1');
+      expect(selectedIds).toContain('1-1-2');
+      expect(selectedIds).toContain('1-2');
+      // Should not contain disabled option '2'
+      expect(selectedIds).not.toContain('2');
+    });
+
+    it('should display custom text after selecting all options via select all checkbox', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+          allSelectedText: 'All',
+        },
+        global: {
+          mocks: {
+            $vt: (key: string) => key,
+          },
+        },
+      });
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      const selectAllCheckbox = wrapper.find(
+        '.all-checkbox-div .oxd-checkbox-input',
+      );
+      await selectAllCheckbox.trigger('click');
+      await wrapper.vm.$nextTick();
+
+      const selectText = wrapper.findComponent({ name: 'oxd-select-text' });
+      expect(selectText.props('value')).toBe('All');
+    });
   });
 });
