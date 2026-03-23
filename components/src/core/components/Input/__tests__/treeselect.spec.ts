@@ -591,17 +591,13 @@ describe('TreeSelect.vue', () => {
     });
 
     it('should emit dropdown:done before dropdown:closed when Done button is clicked', async () => {
+      const emitOrder: string[] = [];
       const wrapper = mount(TreeSelect, {
         props: {
           options,
+          'onDropdown:done': () => emitOrder.push('dropdown:done'),
+          'onDropdown:closed': () => emitOrder.push('dropdown:closed'),
         },
-      });
-
-      const emitOrder: string[] = [];
-      const originalEmit = wrapper.vm.$emit.bind(wrapper.vm);
-      jest.spyOn(wrapper.vm, '$emit').mockImplementation((...args: unknown[]) => {
-        emitOrder.push(args[0] as string);
-        return originalEmit(...args);
       });
 
       wrapper.find('.oxd-select-text').trigger('click');
@@ -612,11 +608,7 @@ describe('TreeSelect.vue', () => {
       await doneButton.trigger('click');
       await wrapper.vm.$nextTick();
 
-      const doneIndex = emitOrder.indexOf('dropdown:done');
-      const closedIndex = emitOrder.indexOf('dropdown:closed');
-      expect(doneIndex).not.toBe(-1);
-      expect(closedIndex).not.toBe(-1);
-      expect(doneIndex).toBeLessThan(closedIndex);
+      expect(emitOrder).toEqual(['dropdown:done', 'dropdown:closed']);
     });
 
     it('should close dropdown after Done button is clicked', async () => {
