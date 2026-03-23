@@ -1,3 +1,5 @@
+2026-03-23 - f43704c9a2cc99876504c0a4a8d506a783eb270d - add emit on done button click in tree select component
+
 2026-03-05 - 9a50f9b95e84621d97b2a0426726cf839339d0ad - components/src/core/components/Icon/icons.ts - Add 'oxd-check-circle-filled','oxd-shield-check-filled','oxd-person-badge-filled','oxd-laptop-filled','oxd-capslock-filled' & 'oxd-e-sign-pen' icons
 
 2026-03-03 - a15cfd91d588439872f49864cc912bc1628b45d9 - add a padding to count chip if there is inline label
