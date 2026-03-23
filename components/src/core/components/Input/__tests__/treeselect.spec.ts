@@ -570,4 +570,114 @@ describe('TreeSelect.vue', () => {
       expect(selectText.props('value')).toBe('All');
     });
   });
+
+  describe('dropdown:done event', () => {
+    it('should emit dropdown:done when Done button is clicked', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+        },
+      });
+
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      const doneButton = wrapper.find('.dropdown-footer-div .oxd-button');
+      await doneButton.trigger('click');
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.emitted('dropdown:done')).toBeTruthy();
+      expect(wrapper.emitted('dropdown:done')?.length).toBe(1);
+    });
+
+    it('should emit dropdown:done before dropdown:closed when Done button is clicked', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+        },
+      });
+
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      const doneButton = wrapper.find('.dropdown-footer-div .oxd-button');
+      await doneButton.trigger('click');
+      await wrapper.vm.$nextTick();
+
+      const emittedEvents = wrapper.emitted();
+      expect(emittedEvents['dropdown:done']).toBeTruthy();
+      expect(emittedEvents['dropdown:closed']).toBeTruthy();
+      expect(emittedEvents['dropdown:done']?.length).toBe(1);
+      expect(emittedEvents['dropdown:closed']?.length).toBe(1);
+    });
+
+    it('should close dropdown after Done button is clicked', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+        },
+      });
+
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('.oxd-select-dropdown').exists()).toBe(true);
+
+      const doneButton = wrapper.find('.dropdown-footer-div .oxd-button');
+      await doneButton.trigger('click');
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('.oxd-select-dropdown').exists()).toBe(false);
+    });
+
+    it('should not emit dropdown:done when clicking outside', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+        },
+      });
+
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      document.body.click();
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.emitted('dropdown:done')).toBeFalsy();
+      expect(wrapper.emitted('dropdown:closed')).toBeTruthy();
+    });
+
+    it('should not emit dropdown:done when pressing Escape key', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+        },
+      });
+
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      await wrapper.find('.oxd-select-text').trigger('keyup.esc');
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.emitted('dropdown:done')).toBeFalsy();
+      expect(wrapper.emitted('dropdown:closed')).toBeTruthy();
+    });
+
+    it('should not emit dropdown:done when toggling dropdown closed', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+        },
+      });
+
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.emitted('dropdown:done')).toBeFalsy();
+      expect(wrapper.emitted('dropdown:closed')).toBeTruthy();
+    });
+  });
 });
