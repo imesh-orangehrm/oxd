@@ -1,5 +1,6 @@
 import {h, ref} from 'vue';
 import {ru} from 'date-fns/locale';
+import {getDaysInMonth} from 'date-fns';
 import DateInput from '@orangehrm/oxd/core/components/Input/DateInput';
 import buildLocale from '@orangehrm/oxd/utils/locale.ts';
 import {convertPHPDateFormat} from '@orangehrm/oxd/utils/date.ts';
@@ -133,6 +134,13 @@ export default {
       control: {type: 'array'},
       table: {
         type: {summary: 'emit event when select a year'},
+      },
+    },
+    topOfInput: {
+      control: {type: 'object'},
+      defaultValue: [],
+      table: {
+        type: {summary: 'A slot which renders an inline label above the input'},
       },
     },
   },
@@ -374,6 +382,218 @@ Events.parameters = {
         '</div>\n' +
         '//\n' +
         'File -> DateInputEvents.story.vue',
+    },
+  },
+};
+
+
+// Helper function to get dates for current month (same as Calendar.stories.js)
+const datesOfMonth = () => {
+  const today = new Date();
+  return new Array(getDaysInMonth(today)).fill('').map((...[, index]) => {
+    return new Date(today.getFullYear(), today.getMonth(), ++index);
+  });
+};
+
+export const BlackoutEvents = (args) => ({
+  setup() {
+    const selected = ref(new Date());
+    return {args, selected};
+  },
+  render() {
+    return h('div', {}, [
+      h(DateInput, {
+        ...this.args,
+        modelValue: this.selected,
+        'onUpdate:modelValue': (value) => {
+          this.selected = value;
+        },
+      }),
+      h('br'),
+      h('p', {}, `v-model : ${this.selected}`),
+    ]);
+  },
+});
+
+BlackoutEvents.args = {
+  events: datesOfMonth().map(date => {
+    const day = date.getDate();
+    
+    // Strict blackout dates (Complete Holidays/Closures)
+    if (day === 8) {
+      return {
+        date,
+        type: 'strict-blackout',
+        class: '--strict-blackout',
+        tooltip: 'System Maintenance\nNo bookings allowed',
+        tooltipPosition: 'top'
+      };
+    }
+    
+    if (day === 15) {
+      return {
+        date,
+        type: 'strict-blackout',
+        class: '--strict-blackout',
+        tooltip: 'Public Holiday - Office Closed',
+        tooltipPosition: 'top'
+      };
+    }
+    
+    // Warning blackout dates (Limited Service Days)
+    if (day === 14) {
+      return {
+        date,
+        type: 'warning-blackout',
+        class: '--warning-blackout',
+        tooltip: 'Limited Availability\nSome services may be affected',
+        tooltipPosition: 'bottom'
+      };
+    }
+    
+    if (day === 16) {
+      return {
+        date,
+        type: 'warning-blackout',
+        class: '--warning-blackout',
+        tooltip: 'Limited Availability\nSome services may be affected',
+        tooltipPosition: 'bottom'
+      };
+    }
+    
+    if (day === 20) {
+      return {
+        date,
+        type: 'warning-blackout',
+        class: '--warning-blackout',
+        tooltip: 'Training Day - Slower Response Time',
+        tooltipPosition: 'bottom'
+      };
+    }
+
+    if (day === 26) {
+      return {
+        date,
+        type: 'strict-blackout',
+        class: '--strict-blackout-disabled',
+        tooltip: 'Christmas Day - Office Closed',
+      };
+    }
+    
+    
+    // Regular dates
+    return {date};
+  })
+};
+
+BlackoutEvents.parameters = {
+  docs: {
+    source: {
+      code: `<oxd-date-input 
+  :events="datesOfMonth().map(date => {
+    const day = date.getDate();
+    
+    // Strict blackout dates (Complete Holidays/Closures)
+    if (day === 8) {
+      return {
+        date,
+        type: 'strict-blackout',
+        class: '--strict-blackout',
+        tooltip: 'System Maintenance\\nNo bookings allowed',
+        tooltipPosition: 'top'
+      };
+    }
+    
+    if (day === 15) {
+      return {
+        date,
+        type: 'strict-blackout',
+        class: '--strict-blackout',
+        tooltip: 'Public Holiday - Office Closed',
+        tooltipPosition: 'top'
+      };
+    }
+    
+    // Warning blackout dates (Limited Service Days)
+    if (day === 14) {
+      return {
+        date,
+        type: 'warning-blackout',
+        class: '--warning-blackout',
+        tooltip: 'Limited Availability\\nSome services may be affected',
+        tooltipPosition: 'bottom'
+      };
+    }
+    
+    if (day === 16) {
+      return {
+        date,
+        type: 'warning-blackout',
+        class: '--warning-blackout',
+        tooltip: 'Limited Availability\\nSome services may be affected',
+        tooltipPosition: 'bottom'
+      };
+    }
+    
+    if (day === 20) {
+      return {
+        date,
+        type: 'warning-blackout',
+        class: '--warning-blackout',
+        tooltip: 'Training Day - Slower Response Time',
+        tooltipPosition: 'bottom'
+      };
+    }
+    if (day === 26) {
+      return {
+        date,
+        type: 'strict-blackout',
+        class: '--strict-blackout-disabled',
+        tooltip: 'Christmas Day - Office Closed',
+      };
+    }
+    
+    // Regular dates
+    return {date};
+  })"
+/>`,
+    },
+  },
+};
+
+export const WithInlineLabel = (args) => ({
+  setup() {
+    const selected = ref('2022-07-01');
+    return {args, selected};
+  },
+  render() {
+    return h('div', {}, [
+      h(DateInput, {
+        ...this.args,
+        modelValue: this.selected,
+        'onUpdate:modelValue': (value) => {
+          this.selected = value;
+        },
+      }, {
+        topOfInput: () => h('span', {style: 'font-size: 12px; color: #666;'}, 'Date of Birth'),
+      }),
+      h('br'),
+      h('p', {}, `v-model : ${this.selected}`),
+    ]);
+  },
+});
+
+WithInlineLabel.args = {};
+
+WithInlineLabel.parameters = {
+  docs: {
+    source: {
+      code:
+        '<oxd-date-input>\n' +
+        '  <template v-slot:topOfInput>\n' +
+        '    <span>Date of Birth</span>\n' +
+        '  </template>\n' +
+        '</oxd-date-input>',
     },
   },
 };

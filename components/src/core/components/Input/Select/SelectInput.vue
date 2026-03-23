@@ -15,13 +15,17 @@
       @keydown.up.exact.prevent="onSelectUp"
       @keydown="onKeypress"
     >
+      <template v-if="$slots.topOfInput" v-slot:topOfInput>
+        <slot name="topOfInput"></slot>
+      </template>
       <template v-slot:afterInput>
         <slot v-if="modelValue" name="afterSelected" :data="modelValue"></slot>
       </template>
     </oxd-select-text>
 
     <oxd-select-dropdown
-      v-dropdown-direction
+      ref="dropdownRef"
+      v-dropdown-direction="forceDropdownPosition === true"
       v-if="dropdownOpen"
       :class="dropdownClasses"
       :loading="isLoading"
@@ -42,7 +46,9 @@
         @select="onSelect(option)"
       >
         <slot name="option" :data="option"></slot>
-        <span v-if="!$slots['option']">{{ $vt(option.label) }}</span>
+        <span v-if="!$slots['option']">{{
+          translateOptions ? $vt(option.label) : option.label
+        }}</span>
       </oxd-select-option>
     </oxd-select-dropdown>
   </div>
@@ -118,6 +124,18 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    translateOptions: {
+      type: Boolean,
+      default: true,
+    },
+    forceDropdownPosition: {
+      type: Boolean,
+      default: false,
+    },
+    scrollToOption: {
+      type: Object,
+      default: null,
+    },
   },
 
   data() {
@@ -157,7 +175,12 @@ export default defineComponent({
       });
     },
     selectedItem(): string {
-      return this.modelValue?.label ? this.$vt(this.modelValue.label) : null;
+      if (this.modelValue?.label) {
+        return this.translateOptions
+          ? this.$vt(this.modelValue.label)
+          : this.modelValue.label;
+      }
+      return '';
     },
     inputValue(): string {
       return this.computedOptions[this.pointer]?.label || this.selectedItem;
@@ -166,8 +189,19 @@ export default defineComponent({
 
   watch: {
     pointer(newIndex: number) {
-      const option = this.$refs[`option-${newIndex}`];
-      if (option?.$el) this.scrollToView(option.$el);
+      if (newIndex >= 0 && this.dropdownOpen) {
+        this.$nextTick(() => {
+          let option = this.$refs[`option-${newIndex}`] as any;
+          // Handle array refs in v-for
+          if (Array.isArray(option)) {
+            option = option[0];
+          }
+          const el = option?.$el || option;
+          if (el && el.scrollIntoView) {
+            this.scrollToView(el);
+          }
+        });
+      }
     },
   },
 });

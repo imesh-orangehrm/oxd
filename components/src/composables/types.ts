@@ -39,9 +39,54 @@ export const formKey: InjectionKey<FormAPI> = Symbol('form');
 
 export interface FieldContext {
   fieldLabel: string;
-  rules: Rules;
+  modelName: string;
   modelValue: ModelValue;
-  isDisabled: Disabled;
+  rules: Rules;
+  isDisabled: Ref<boolean>;
   isDirty: boolean;
-  onReset: () => Promise<void>;
+  onReset: () => void;
+  getSnapshot?: unknown;
 }
+
+export interface FieldProperties {
+  cid: string;
+  label: string;
+  dirty: boolean;
+  touched: boolean;
+  modelName: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  modelValue: any;
+}
+
+export interface ValidationHookContext {
+  onValidationError?: (
+    field: FieldProperties,
+    errors: string[],
+  ) => void | Promise<void>;
+  onValidationComplete?: (
+    field: FieldProperties,
+    result: ErrorField,
+  ) => void | Promise<void>;
+  onValidationStart?: (field: FieldProperties) => void | Promise<void>;
+  onSuccessfulValidation?: (field: FieldProperties) => void | Promise<void>;
+  onFieldRegister?: (field: FieldProperties) => void | Promise<void>;
+  onFieldUnregister?: (field: FieldProperties) => void | Promise<void>;
+}
+
+export type ValidationHookSet = Set<ValidationHookContext>;
+export const validationHookKey: InjectionKey<ValidationHookSet> = Symbol(
+  'vhooks',
+);
+
+export interface FieldState {
+  cid: string;
+  label: string;
+  dirty: boolean;
+  touched: boolean;
+  modelName: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  modelValue: any;
+  processing: boolean;
+}
+
+export type CustomSnapshotFn = (state: FieldState) => FieldProperties;

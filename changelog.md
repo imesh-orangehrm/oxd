@@ -1,12 +1,124 @@
+2026-03-05 - 9a50f9b95e84621d97b2a0426726cf839339d0ad - components/src/core/components/Icon/icons.ts - Add 'oxd-check-circle-filled','oxd-shield-check-filled','oxd-person-badge-filled','oxd-laptop-filled','oxd-capslock-filled' & 'oxd-e-sign-pen' icons
+
+2026-03-03 - a15cfd91d588439872f49864cc912bc1628b45d9 - add a padding to count chip if there is inline label
+
+2025-02-24 - c7d1ea6631b4a04a34ea3e440b33417a15547b2c - components/src/core/components/Input/TreeSelect/TreeSelect.vue - Improve tree-select input to show selected values as much as possible (not limited to one)
+
+2025-02-16 - 03a24eacc0c10d61ba5c26b934ec433d93c6b386 - components/src/core/components/Input/TreeSelect/TreeSelect.vue - Show "All" when all the options are selected in the treeselect input
+
+2025-02-06 - 552b3ef11cf0f00012f4063f6a9f78e9ea495efb - components/src/core/components/Icon/icons.ts - Add oxd-schedule icon
+
+2025-01-30 - fddf1d704af2866ce27dbe3388093eb2a04c976a - components/src/core/components/Icon/icons.ts - Add oxd-worksite, oxd-bookmark
+
+2025-01-30 - 605122c87c0ff50501b10a22339e6319ee497664 - components/src/core/components/Input/TreeSelect/TreeSelect.vue, components/src/core/components/Input/Input.vue - Added new slot to support inline label capability for Input and Treeselect input components
+
+2025-01-09 - 0265f2d40dc4262dac28ddbbb111663d737ed795 - components/src/core/components/Icon/icons.ts - Add oxd-dollor-earning,oxd-dollar-deduction,oxd-dollor-pay-structure,oxd-dollor-base-pay,oxd-dollor-pay-summary icons
+
+2025-12-23 - 4883d072289419a163910cde18ec7e5cb69d9dfb - components/src/core/components/Calendar/calendar.scss - Added styles to show today's date with orange background when it is selected even on disabled blackout dates.
+
+2025-12-17 - f1ffdb28fcab2b3a9b07da6336ce1eb9da02a3d0 - components/src/core/components/Input/RadioInput.vue, components/src/core/components/Input/RadioGroup.vue, components/src/core/components/Input/radio-input.scss components/src/core/components/Input/_variables.scss - Add optional secondaryLabel prop to radio buttons for displaying additional information
+
+2025-12-16 - d3b4f1f2553967a334ce5414eb3f83c12d19c368 - components/src/core/components/Icon/icons.ts - Add oxd-slash-circle icon
+
+2025-11-30 - 30957e24f2be744d6a1987c8951e1b083b0a57c5 - components/src/core/components/Icon/icons.ts - Add oxd-swap icon
+
+2025-11-25 - eb7604886ab6816c6b0939385d6157eb53a2cb85 - components/src/core/components/TinyMce/skins/lightgray/content.module.css -  Added Arial as default font for TinyMce
+
+2025-11-19 - dfead436dde5cc128316cb99b802ebd4704fe7b6 - components/src/core/components/Input/MultiSelect/MultiSelectInput.vue - Support keyboard navigation of options
+
+2025-11-12 - d91eec609c6a8d11944277c1534af16b19800f34 - components/src/core/components/Input/Autocomplete/AutocompleteInput.vue, components/src/core/components/Input/DateInput.vue, components/src/core/components/Textarea/Textarea.vue, components/src/core/components/Icon/icons.ts - add new slot to inline label for AutoComplete, DateInput, TextArea input fields and added oxd-break,oxd-start-end-time,oxd-set-time,oxd-recurrence,oxd-person-fill,oxd-department,oxd-date,oxd-close,oxd-shift-note icons
+
+2025-11-10 - 51e21e7105151dfe8cb37934f343b0f8d01662bd - components/src/core/components/Icon/icons.ts - Add oxd-number icon
+
+2025-11-10 - cf42c8406d23f81d3bc750a774dc33cb0bfbb07d - components/src/core/components/Icon/icons.ts - Added icons : oxd-ai-help
+
+2025-11-10 - 85c78978bb83adfe85ad56cf67a5b9bc4820a353 - components/src/core/components/Icon/icons.ts - Added icons : oxd-remove, oxd-ok
+
+2025-11-10 - 8c64f46d1594cdaa64b5a46460ea2d1d4e11d5ef - components/src/core/components/Icon/icons.ts - Added icons : oxd-mic
+
+2025-10-27 - dc6dd3cab272c6c7df79e0ee90dc7a4007c0e328 - components/src/core/components/Input/Select/navigation-mixin.ts, components/src/core/components/Input/Select/events-mixin.ts - Change OXD select behaviour to not select option on keystroke, clear pointer on close
+
+2025-10-21 - 02943b8121e9e6f2b47a264838a74afa7b82b1ef - components/src/core/components/Input/Select/navigation-mixin.ts - Improve keypress cycling to navigate through all matching options
+
+2025-10-20 - a28c4b893782bbd13ff491d37ee06622062dd5e4 - components/src/core/components/Icon/icons.ts - Added icons : oxd-dollar-symbol
+
+2025-10-17 - 878e013fe00284ce969d810db31eb71f9155c7eb - components/src/core/components/Input/Select/events-mixin.ts - Fixed Dropdown Scroll Behavior to Prevent Parent Container Scrolling
+
+2025-10-16 - be4112ff7db4c4b376e3cef04ec0c0275464841e - components/src/core/components/Input/Select/events-mixin.ts - Change scrollToView behaviour as auto.
+
+2025-10-16 - ba91e7ae77499398f5a15471901d329102ac1cae - components/src/core/components/Input/Select/SelectInput.vue, components/src/core/components/Input/Select/events-mixin.ts - Enhanced dropdown component to auto-scroll to the selected option and add a new prop called scrollToOption to auto-scroll to given specific option. 
+
+2025-10-03 - f5a0e2aaab498f23f7c8b726336a2f5b221ab26a - components/src/core/components/Icon/icons.ts - Add oxd-delete icon
+
+2025-09-19 - da08b5e9e5bfed360d38bfa495511ff23017340e - components/src/core/components/Calendar/Calendar.vue - Fix calendar to default visible month based on min/max values.
+
+2025-09-19 - 90636c51312cc3ff8cdc87298c43471b20cdff4a - components/src/core/components/Icon/icons.ts - Add oxd-print icon
+
+2025-08-22 - 390b3a08bddd39d4511c8a1ffd1bf3dd2e90b7c1 - components/src/core/components/Input/Autocomplete/AutocompleteInput.vue - Pass selected options to createOptions function enabling developers to filter already selected options
+
+2025-08-19 - 3dc9a8853d02cb4d9fafa12986b9234ffb8d42a8 - components/src/core/components/Icon/icons.ts - Added icons : oxd-multi-user-2, oxd-logs-list, oxd-created-date, oxd-modified-date
+
+2025-08-12 - 441ddf4d243d25c1fd80c3cc6f2b7e7557178dc1 - components/src/core/components/Icon/icons.ts Added icon : oxd-adjust.
+
+2025-08-04 - a034a4785409aaabd52df67ed136a1f240cb6d8f - components/src/core/components/Input/Autocomplete/AutocompleteInput.vue Fix autocomplete dropdown doesn't shows all matching results with proper 5-item display limit.
+
+2025-07-25 - 0dfb35532153bdf53d794c9e98bc9be287ed51c9 - components/src/core/components/Input/Select/SelectInput.vue Add new slot for inline label for dropdown.
+
+2025-07-14 - 5755b20da63e679a67283113880ec2db734b01be - components/src/core/components/Input/Select/SelectInput.vue - Added a new prop called forceDropdownPosition to force the dropdown position, components/src/directives/dropdown-direction/index.ts - Added changes to force the dropdown position
+
+2025-06-26 - 0ce8d51eeb6014ed5a5b194e6168896d864af1a4 - components/src/core/components/Icon/icons.ts - oxdCopy icon button style changes
+
+2025-06-20 - 253a55178b74b48bc1db417ef2f1fd5e3d5a03bb - components/src/core/components/Icon/icons.ts - Added icons : oxd-saving, oxd-save-error
+
+2025-06-20 - 817afecb8a122d851d455358f60c8b5e1a912fad - components/src/core/components/Icon/icons.ts - Added icons : oxd-application-received , oxd-shortlisted , oxd-interview , oxd-test , oxd-hired , oxd-job-offer , oxd-expand , oxd-collapse , oxd-auto-save
+
+2025-06-05 - 42563da35f05e286119f1e37dda743f052937984 - components/src/core/components/Input/TreeSelect/TreeSelect.vue - select only not disabled options when selecting all otpions.
+
+2025-06-03 - 0058934f5b717d01998650a25366529f777eec72 - components/src/composables/useFlashing.ts, components/src/core/components/ListTable/ListTable.vue - Add support to ignore specific attributes when detecting flash rows
+
+2025-06-02 - a6453107053cbee9b7ea128460507c535c10a4dd - components/src/core/components/Icon/icons.ts, components/src/core/components/CardTable/Cell/ProfilePicture.vue - Added oxd-past-employee icon and added secondary icon button in to the ProfilePicture component
+
+2025-05-27 - 69c989e9faeb39cdbecb2873a0dea9aa9645b4fb - components/src/core/components/Icon/icons.ts - Added icon : oxd-duplicate
+
+2025-05-21 - 196352bfc706fdb456effebe87224c47b0a7ae90 - components/src/core/components/Icon/icons.ts - Added icons : oxd-application-form, oxd-drag-icon-vertical, oxd-description, oxd-posting, oxd-smart-screen, oxd-view-info, oxd-workflow
+
+2025-05-14 - 511762a38749a9a04bf3c855f7bb41bae9405920 - components/src/core/components/Icon/icons.ts - Added oxd-citra-new-chat icon
+
+2025-05-09 - cd602f0751162656a10875d3042de4e855895677 - components/src/core/components/Icon/icons.ts - Added oxd-section icon
+
+2025-05-05 - b9c9c21bde995468e8051a4eb55abf89d341ab3d - components/Input/Select/SelectInput.vue - Added a new prop called translateOptions to prevent the translation of the select component's options
+
+2025-04-18 - cca89d5ee4a51cfd6c1c764a416f1370a346f8ee - Added OXD Wizard component : components/src/core/components/Wizard/Wizard.vue, components/src/core/components/Wizard/Wizard.scss, components/src/core/components/Wizard/types.ts
+
+2025-04-04 - a34df128b3a2568a8d02ef3c5b169b261d923316 - components/src/core/components/CardTable/Cell/Dropdown.vue - Added tabindex to dropdown items to support keyboard accessiblity
+
+2025-03-20 - ff114ce595dc09f5a37518bf2c2f5de3ddfdd308 - components/src/core/components/Icon/icons.ts - Added oxd-ai-content icon
+
+2025-03-20 - ff114ce595dc09f5a37518bf2c2f5de3ddfdd308 - components/src/core/components/ListTable/ListTable.vue - Refactor ListTable selection header logic with enable adding both Icon and text for list header in same time
+
+2025-03-20 - 4122c2c302493c878fef0b37dd94c653420684a5 - components/src/core/components/Input/RadioGroup.vue - Add name property to radio group for keyboard accessiblity
+
+2025-03-07 - b5ce75a28ee89ab7fe0c6361e11659a385e744af - components/src/core/components/ListTable/ListTable.vue - Refactor ListTable selection logic with isItemSelectable helper
+
+2025-03-06 - b613122b8b919850b356d77a245e836f53173ba1 - components/src/composables/useFlashing.ts, components/src/core/components/CardTable/types.ts, components/src/core/components/CardTable/Cell/Checkbox.vue, components/src/core/components/ListTable/ListTable.vue - Add selection mode support for list table
+
+2025-03-06 - 3b38331530364fc1848235bb1b8415722f981d1d - components/src/composables/types.ts, components/src/composables/useField.ts, components/src/composables/useValidationHooks.ts, components/src/core/components/InputField/InputField.vue - Add useValidationHooks composable and inject validationhook context to fields
+
+2025-02-25 - c8dd1795b3f99197795c25a4168d10cbcd2379ef - components/src/core/components/Input/DateInput.vue - Enabling the calender widget to open upon click on text input, Enabling the calender widget to include an action button instead of date input links (Today/Clear/Close)
+
+2025-01-31 - d1b4c076ca73c443c6c2d13b6733879a255eba01 - components/src/core/components/Icon/icons.ts - Add oxd-overnight-shift icon
+
+2025-01-30 - b2efada3c181274cadc340ed0cb6c8251c5cadb3 - components/src/core/components/Icon/icons.ts - Update oxd-summary-report and oxd-detailed-report icons
+
 2025-01-17 - 00972872186d9b9dd80c1365d16c716d28f1859f - components/src/core/components/Icon/icons.ts - Add oxd-summary-report and oxd-detailed-report icons
 
-2024-12-16 - f255b3c85791e055d3e20ac17da329997382ab17 - components/src/styles/_utility.scss - Reduce the max-width of system tooltips to 200px
+2024-12-16 - f255b3c85791e055d3e20ac17da329997382ab17 - components/src/styles/\_utility.scss - Reduce the max-width of system tooltips to 200px
 
-2024-12-10 - eadf4782dcd2336a5de7efcee2eaaff4a44d1cc9 - CardTable/Cell/Checkbox.vue, Input/CheckboxInput.vue, CardTable/Header/DefaultCardHeader.vue, ListTable/ListTable.vue -  Update Card table, List table bulk selection behavior to match updated OXD standard
+2024-12-10 - eadf4782dcd2336a5de7efcee2eaaff4a44d1cc9 - CardTable/Cell/Checkbox.vue, Input/CheckboxInput.vue, CardTable/Header/DefaultCardHeader.vue, ListTable/ListTable.vue - Update Card table, List table bulk selection behavior to match updated OXD standard
 
-2024-12-06 - 6cb384e32c6b56d65cc35801cfd54ba1b3aca5fb - CardTable/Cell/DefaultCellContainer.vue, CardTable/Header/DefaultCardHeader.vue, CardTable/Table/_variables.scss, CardTable/Table/table-row.scss, List/list.scss, ListTable/CellContainer.vue - Add 11px left and right padding for each cell, remove right padding of checkbox cell, make left padding of any first coloumn 5px and right align all action buttons in action class.
+2024-12-06 - 6cb384e32c6b56d65cc35801cfd54ba1b3aca5fb - CardTable/Cell/DefaultCellContainer.vue, CardTable/Header/DefaultCardHeader.vue, CardTable/Table/\_variables.scss, CardTable/Table/table-row.scss, List/list.scss, ListTable/CellContainer.vue - Add 11px left and right padding for each cell, remove right padding of checkbox cell, make left padding of any first coloumn 5px and right align all action buttons in action class.
 
-2024-12-05 - c041308720a8cf73b879a431e97ff08f997df0a8 - TinyMce/TinyMce.vue - add background image and remove image option  
+2024-12-05 - c041308720a8cf73b879a431e97ff08f997df0a8 - TinyMce/TinyMce.vue - add background image and remove image option
 
 2024-12-02 - abc536c1864e5c272aac7508bf19066148f0969c - components/Icon/icons.ts - Update oxd-refresh icon fill colour
 
@@ -20,7 +132,7 @@
 
 2024-11-11 - 30e71393cff4e116c842c56bf35ef84bd659448d - components/Input/CheckboxInput.vue, components/Input/CheckboxInput.vue - Add a border prop to enable borders for the checkbox and an optionInfoIconPosition prop to adjust optional icon position.
 
-2024-11-08 - cca468f6ad704248ff1de9f34672f3cf29d516e2 - components/CardTable/Cell/LinkWithPill.vue -  header pass as props
+2024-11-08 - cca468f6ad704248ff1de9f34672f3cf29d516e2 - components/CardTable/Cell/LinkWithPill.vue - header pass as props
 
 2024-11-07 - 897c614bb977f6e559e717ad0a69a0bce5869183 - components/Tabs/Tabs.vue - Add tooltip to tab icon when title is absent
 

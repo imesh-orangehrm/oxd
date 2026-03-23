@@ -4,6 +4,7 @@ import SelectText from '@orangehrm/oxd/core/components/Input/Select/SelectText.v
 import SelectOption from '@orangehrm/oxd/core/components/Input/Select/SelectOption.vue';
 import {BOTTOM} from '@orangehrm/oxd/core/components/Input/types';
 import SelectInputButton from '@orangehrm/oxd/core/components/Input/Select/SelectInputButton.vue';
+import {flushPromises} from '@vue/test-utils';
 
 const options = [
   {
@@ -17,6 +18,50 @@ const options = [
   {
     id: 3,
     label: 'Supervisor',
+  },
+];
+
+const optionsWithMultipleS = [
+  {
+    id: 1,
+    label: 'HR Admin',
+  },
+  {
+    id: 2,
+    label: 'ESS User',
+  },
+  {
+    id: 3,
+    label: 'Supervisor',
+  },
+  {
+    id: 4,
+    label: 'Senior Executive',
+  },
+  {
+    id: 5,
+    label: 'Software Engineer',
+  },
+  {
+    id: 6,
+    label: 'Sales Manager',
+  },
+  {
+    id: 7,
+    label: 'System Administrator',
+  },
+  {
+    id: 8,
+    label: 'Manager',
+  },
+  {
+    id: 9,
+    label: 'Assistant Manager',
+    _disabled: true,
+  },
+  {
+    id: 10,
+    label: 'Security Analyst',
   },
 ];
 
@@ -305,5 +350,334 @@ describe('SelectInput.vue', () => {
     iconButton = wrapper.findComponent({name: 'oxd-icon-button'});
     await wrapper.vm.$nextTick();
     expect(iconButton.props('name')).toBe(dropdownTriggerCloseIcon);
+  });
+
+  it('should not translate option labels when translateOptions is false', async () => {
+    const $vt = jest.fn();
+    const wrapper = mount(SelectInput, {
+      props: {
+        options,
+        translateOptions: false,
+      },
+      global: {
+        mocks: {
+          $vt,
+        },
+      },
+    });
+    wrapper.findComponent(SelectText).trigger('click');
+    await wrapper.vm.$nextTick();
+    const nodes = wrapper.findAllComponents(SelectOption);
+    expect(nodes[0].text()).toBe('HR Admin');
+    expect(nodes[1].text()).toBe('ESS User');
+    expect(nodes[2].text()).toBe('Supervisor');
+    expect($vt).not.toHaveBeenCalled();
+  });
+
+  it('should compute dropdownClasses conditionally based on forceDropdownPosition prop', async () => {
+    const wrapper = mount(SelectInput, {
+      props: {
+        options,
+        forceDropdownPosition: true,
+        dropdownPosition: 'top',
+      },
+    });
+
+    wrapper.findComponent(SelectText).trigger('click');
+    await wrapper.vm.$nextTick();
+
+    const dropdown = wrapper.findComponent({name: 'oxd-select-dropdown'});
+    expect(dropdown.exists()).toBe(true);
+
+    expect(wrapper.vm.dropdownClasses).toStrictEqual({
+      '--positon-bottom': false,
+      '--positon-top': true,
+      '--with-empty-selector': false,
+    });
+  });
+
+  describe('Scrolling Behavior', () => {
+    it('should scroll to selected option when dropdown opens', async () => {
+      const wrapper = mount(SelectInput, {
+        props: {
+          options,
+          modelValue: {
+            id: 2,
+            label: 'ESS User',
+          },
+        },
+      });
+
+      const scrollToOptionByIndex = jest.spyOn(
+        wrapper.vm,
+        'scrollToOptionByIndex',
+      );
+
+      wrapper.findComponent(SelectText).trigger('click');
+      await wrapper.vm.$nextTick();
+      await flushPromises();
+
+      expect(scrollToOptionByIndex).toHaveBeenCalledWith(1);
+    });
+
+    it('should scroll to scrollToOption prop when no selection exists', async () => {
+      const wrapper = mount(SelectInput, {
+        props: {
+          options,
+          scrollToOption: {
+            id: 3,
+            label: 'Supervisor',
+          },
+        },
+      });
+
+      const scrollToOptionByIndex = jest.spyOn(
+        wrapper.vm,
+        'scrollToOptionByIndex',
+      );
+
+      wrapper.findComponent(SelectText).trigger('click');
+      await wrapper.vm.$nextTick();
+      await flushPromises();
+
+      expect(scrollToOptionByIndex).toHaveBeenCalledWith(2);
+    });
+
+    it('should prioritize selected value over scrollToOption prop', async () => {
+      const wrapper = mount(SelectInput, {
+        props: {
+          options,
+          modelValue: {
+            id: 1,
+            label: 'HR Admin',
+          },
+          scrollToOption: {
+            id: 3,
+            label: 'Supervisor',
+          },
+        },
+      });
+
+      const scrollToOptionByIndex = jest.spyOn(
+        wrapper.vm,
+        'scrollToOptionByIndex',
+      );
+
+      wrapper.findComponent(SelectText).trigger('click');
+      await wrapper.vm.$nextTick();
+      await flushPromises();
+
+      // Should scroll to modelValue (index 0), not scrollToOption (index 2)
+      expect(scrollToOptionByIndex).toHaveBeenCalledWith(0);
+    });
+  });
+
+  describe('Keypress Cycling', () => {
+    it('should cycle through all options starting with the same letter', async () => {
+      const wrapper = mount(SelectInput, {
+        props: {
+          options: optionsWithMultipleS,
+        },
+      });
+
+      const selectText = wrapper.findComponent(SelectText);
+
+      // First press of 'S' should focus 'Supervisor' (index 2)
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(2);
+
+      // Second press of 'S' should focus 'Senior Executive' (index 3)
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(3);
+
+      // Third press of 'S' should focus 'Software Engineer' (index 4)
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(4);
+
+      // Fourth press of 'S' should focus 'Sales Manager' (index 5)
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(5);
+
+      // Fifth press of 'S' should focus 'System Administrator' (index 6)
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(6);
+
+      // Sixth press of 'S' should focus 'Security Analyst' (index 9, skipping disabled option)
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(9);
+
+      // Seventh press of 'S' should cycle back to 'Supervisor' (index 2)
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(2);
+    });
+
+    it('should handle independent cycling for different letters', async () => {
+      const wrapper = mount(SelectInput, {
+        props: {
+          options: optionsWithMultipleS,
+        },
+      });
+
+      const selectText = wrapper.findComponent(SelectText);
+
+      // Press 'S' to focus first S option
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(2); // Supervisor
+
+      // Press 'M' to focus first M option
+      await selectText.trigger('keydown', {key: 'm'});
+      expect(wrapper.vm.pointer).toBe(7); // Manager
+
+      // Press 'S' again - should focus Supervisor (first S option)
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(2); // Supervisor
+
+      // Press 'H' to focus HR Admin
+      await selectText.trigger('keydown', {key: 'h'});
+      expect(wrapper.vm.pointer).toBe(0); // HR Admin
+    });
+
+    it('should skip disabled options during cycling', async () => {
+      const optionsWithDisabled = [
+        {id: 1, label: 'Sales Manager'},
+        {id: 2, label: 'Senior Executive', _disabled: true},
+        {id: 3, label: 'Software Engineer'},
+        {id: 4, label: 'System Administrator', _disabled: true},
+        {id: 5, label: 'Security Analyst'},
+      ];
+
+      const wrapper = mount(SelectInput, {
+        props: {
+          options: optionsWithDisabled,
+        },
+      });
+
+      const selectText = wrapper.findComponent(SelectText);
+
+      // First press should focus 'Sales Manager'
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(0);
+
+      // Second press should skip disabled 'Senior Executive' and focus 'Software Engineer'
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(2);
+
+      // Third press should skip disabled 'System Administrator' and focus 'Security Analyst'
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(4);
+
+      // Fourth press should cycle back to 'Sales Manager'
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(0);
+    });
+
+    it('should handle case insensitive keypress', async () => {
+      const wrapper = mount(SelectInput, {
+        props: {
+          options: optionsWithMultipleS,
+        },
+      });
+
+      const selectText = wrapper.findComponent(SelectText);
+
+      // Press uppercase 'S'
+      await selectText.trigger('keydown', {key: 'S'});
+      expect(wrapper.vm.pointer).toBe(2); // Supervisor
+
+      // Press lowercase 's' - should continue cycling
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(3); // Senior Executive
+    });
+
+    it('should not trigger on multi-character keys', async () => {
+      const wrapper = mount(SelectInput, {
+        props: {
+          options: optionsWithMultipleS,
+        },
+      });
+
+      const selectText = wrapper.findComponent(SelectText);
+
+      // Press multi-character keys
+      await selectText.trigger('keydown', {key: 'Enter'});
+      await selectText.trigger('keydown', {key: 'Escape'});
+      await selectText.trigger('keydown', {key: 'ArrowDown'});
+
+      // Should not emit any modelValue updates
+      expect(wrapper.emitted('update:modelValue')).toBeFalsy();
+    });
+
+    it('should not trigger when disabled', async () => {
+      const wrapper = mount(SelectInput, {
+        props: {
+          options: optionsWithMultipleS,
+          disabled: true,
+        },
+      });
+
+      const selectText = wrapper.findComponent(SelectText);
+
+      await selectText.trigger('keydown', {key: 's'});
+
+      // Should not emit any modelValue updates when disabled
+      expect(wrapper.emitted('update:modelValue')).toBeFalsy();
+    });
+
+    it('should not trigger when readonly', async () => {
+      const wrapper = mount(SelectInput, {
+        props: {
+          options: optionsWithMultipleS,
+          readonly: true,
+        },
+      });
+
+      const selectText = wrapper.findComponent(SelectText);
+
+      await selectText.trigger('keydown', {key: 's'});
+
+      // Should not emit any modelValue updates when readonly
+      expect(wrapper.emitted('update:modelValue')).toBeFalsy();
+    });
+
+    it('should handle no matching options gracefully', async () => {
+      const wrapper = mount(SelectInput, {
+        props: {
+          options: [
+            {id: 1, label: 'HR Admin'},
+            {id: 2, label: 'Manager'},
+          ],
+        },
+      });
+
+      const selectText = wrapper.findComponent(SelectText);
+
+      // Press 'Z' - no options start with Z
+      await selectText.trigger('keydown', {key: 'z'});
+
+      // Should not emit any modelValue updates
+      expect(wrapper.emitted('update:modelValue')).toBeFalsy();
+    });
+
+    it('should handle single matching option', async () => {
+      const wrapper = mount(SelectInput, {
+        props: {
+          options: [
+            {id: 1, label: 'HR Admin'},
+            {id: 2, label: 'Manager'},
+            {id: 3, label: 'Supervisor'},
+          ],
+        },
+      });
+
+      const selectText = wrapper.findComponent(SelectText);
+
+      // Press 'S' - only one option starts with S
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(2); // Supervisor
+
+      // Press 'S' again - should focus the same option again
+      await selectText.trigger('keydown', {key: 's'});
+      expect(wrapper.vm.pointer).toBe(2); // Supervisor
+    });
   });
 });

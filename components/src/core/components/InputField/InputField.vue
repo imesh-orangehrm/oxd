@@ -97,6 +97,7 @@ export default defineComponent({
 
   props: {
     modelValue: {},
+    snapshotFunction: {},
     label: {
       type: String,
     },
@@ -108,6 +109,9 @@ export default defineComponent({
       default: false,
     },
     id: {
+      type: String,
+    },
+    modelName: {
       type: String,
     },
     disabled: {
@@ -167,11 +171,13 @@ export default defineComponent({
 
     const {hasError, message, startWatcher, dirty} = useField({
       fieldLabel: props.label ? props.label : '',
+      modelName: props.modelName ? props.modelName : '',
       rules,
       modelValue,
       isDisabled,
       isDirty,
       onReset,
+      getSnapshot: props.snapshotFunction,
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

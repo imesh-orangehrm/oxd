@@ -7,7 +7,16 @@
     @focus="onFocus"
     @blur="onBlur"
   >
-    <div class="oxd-select-text-input">
+    <!-- Inline label slot -->
+    <div v-if="$slots.topOfInput" class="oxd-select-text--inline-label">
+      <slot name="topOfInput"></slot>
+    </div>
+
+    <!-- Input content - aligns to bottom when inline label is present -->
+    <div
+      class="oxd-select-text-input"
+      :class="{'oxd-select-text--has-inline-label': $slots.topOfInput}"
+    >
       <div v-if="!value" class="select-placeholder">{{ $vt(placeholder) }}</div>
       <div v-else class="selected-content">{{ value }}</div>
       <input

@@ -1,34 +1,72 @@
 import {
-  ref,
-  computed,
-  watchEffect,
-  onBeforeUnmount,
-  WatchStopHandle,
-} from 'vue';
-import {nanoid} from 'nanoid';
-import {injectStrict} from '../utils/injectable';
-import {
-  ErrorField,
-  FormAPI,
-  formKey,
-  ModelValue,
   Rules,
+  formKey,
+  FormAPI,
+  ErrorField,
+  ModelValue,
+  FieldState,
   FieldContext,
+  FieldProperties,
+  CustomSnapshotFn,
 } from './types';
+import {nanoid} from 'nanoid';
+import {isEqual} from 'lodash-es';
+import {injectStrict} from '../utils/injectable';
+import {injectValidationHook} from './useValidationHooks';
+import {ref, watch, computed, onBeforeUnmount, WatchStopHandle} from 'vue';
 
 export default function useField(fieldContext: FieldContext) {
   const form = injectStrict<FormAPI>(formKey);
+  const validationHook = injectValidationHook();
   const cid = ref<string>(nanoid());
   const label = ref<string>(fieldContext.fieldLabel);
+  const name = ref<string>(fieldContext.modelName);
   const dirty = ref<boolean>(fieldContext.isDirty);
   const touched = ref<boolean>(false);
   const processing = ref<boolean>(false);
   let watchHandler: WatchStopHandle | undefined;
 
-  const validate = (modelValue: ModelValue, rules: Rules) => {
-    if (fieldContext.isDisabled.value)
-      return Promise.resolve({cid: cid.value, errors: []});
+  const getFieldSnapshot = () => {
+    const state: FieldState = {
+      cid: cid.value,
+      label: label.value,
+      dirty: dirty.value,
+      touched: touched.value,
+      modelName: name.value,
+      modelValue: fieldContext.modelValue.value,
+      processing: processing.value,
+    };
+
+    if (typeof fieldContext.getSnapshot === 'function') {
+      return (fieldContext.getSnapshot as CustomSnapshotFn)(state);
+    }
+
+    return {
+      cid: state.cid,
+      label: state.label,
+      dirty: state.dirty,
+      touched: state.touched,
+      modelName: state.modelName,
+      modelValue: state.modelValue,
+    } as FieldProperties;
+  };
+
+  const validate = (
+    modelValue: ModelValue,
+    rules: Rules,
+    modelUpdated?: boolean,
+  ) => {
+    const validationResult: ErrorField = {
+      cid: cid.value,
+      errors: [],
+    };
+
+    if (fieldContext.isDisabled.value) return Promise.resolve(validationResult);
+
     processing.value = true;
+    const snapshot = getFieldSnapshot();
+    if (modelUpdated) validationHook?.onValidationStart?.(snapshot);
+
     const allValidations = Promise.all(
       rules.value.map(func => {
         return new Promise<boolean>((resolve, reject) => {
@@ -52,37 +90,41 @@ export default function useField(fieldContext: FieldContext) {
     return new Promise<ErrorField>((resolve, reject) => {
       allValidations
         .then(() => {
-          resolve({
-            cid: cid.value,
-            errors: [],
-          });
+          if (modelUpdated) validationHook?.onSuccessfulValidation?.(snapshot);
+          resolve(validationResult);
         })
         .catch(error => {
           if (typeof error === 'string') {
-            resolve({
-              cid: cid.value,
-              errors: [error],
-            });
+            validationResult.errors.push(error);
+            if (modelUpdated)
+              validationHook?.onValidationError?.(snapshot, [error]);
+            resolve(validationResult);
           } else {
             reject(error);
           }
         })
         .finally(() => {
           processing.value = false;
+          if (modelUpdated)
+            validationHook?.onValidationComplete?.(snapshot, validationResult);
         });
     });
   };
 
   const startWatcher = () => {
-    watchHandler = watchEffect(
-      () => {
-        validate(fieldContext.modelValue, fieldContext.rules).then(result => {
+    watchHandler = watch(
+      [fieldContext.modelValue, fieldContext.rules],
+      ([newModelValue], [oldModelValue]) => {
+        const isModelUpdated = !isEqual(newModelValue, oldModelValue);
+        validate(
+          fieldContext.modelValue,
+          fieldContext.rules,
+          isModelUpdated,
+        ).then(result => {
           form.addError(result);
         });
       },
-      {
-        flush: 'post',
-      },
+      {flush: 'post'},
     );
   };
 
@@ -98,6 +140,8 @@ export default function useField(fieldContext: FieldContext) {
     fieldContext.onReset();
   };
 
+  validationHook?.onFieldRegister?.(getFieldSnapshot());
+
   form.registerField({
     cid,
     label,
@@ -111,6 +155,7 @@ export default function useField(fieldContext: FieldContext) {
   });
 
   onBeforeUnmount(() => {
+    validationHook?.onFieldUnregister?.(getFieldSnapshot());
     form.unregisterField({
       cid,
       label,

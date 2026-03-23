@@ -1,4 +1,5 @@
 /* Global */
+$oxd-font-family: 'Nunito', sans-serif !default;
 $oxd-border: 1px solid !default;
 $oxd-border-radius: 1.2rem !default;
 $oxd-scrollbar-thumb-border-radius: 20px !default;
@@ -92,3 +93,7 @@ $oxd-primary-input-color-lighten-10: lighten(
   $oxd-primary-input-color,
   10%
 ) !default;
+
+$oxd-inline-label-top: 6px !default;
+$oxd-inline-label-left: 8px !default;
+$oxd-inline-label-font-size: 0.625rem !default;

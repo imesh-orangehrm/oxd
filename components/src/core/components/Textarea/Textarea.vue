@@ -1,12 +1,23 @@
 <template>
-  <textarea
-    :class="classes"
-    :style="style"
-    :value="modelValue"
-    @focus="onFocus"
-    @blur="onBlur"
-    @input="onInput"
-  />
+  <div
+    class="oxd-textarea-wrapper"
+    :class="{'oxd-textarea-wrapper--has-inline-label': $slots.topOfInput}"
+  >
+    <!-- Inline label slot -->
+    <div v-if="$slots.topOfInput" class="oxd-textarea--inline-label">
+      <slot name="topOfInput"></slot>
+    </div>
+
+    <textarea
+      :class="classes"
+      :style="style"
+      :value="modelValue"
+      v-bind="$attrs"
+      @focus="onFocus"
+      @blur="onBlur"
+      @input="onInput"
+    />
+  </div>
 </template>
 
 <script lang="ts">
@@ -24,6 +35,7 @@ export interface State {
 
 export default defineComponent({
   name: 'oxd-textarea',
+  inheritAttrs: false,
 
   props: {
     modelValue: {},

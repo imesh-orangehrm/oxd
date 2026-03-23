@@ -1,6 +1,29 @@
 @import '../../../styles';
-@import '../../../styles/icons';
 @import 'variables';
+
+.oxd-menu-icon {
+  height: 22px;
+  width: 22px;
+  background-repeat: no-repeat;
+  background-size: 22px 22px;
+  display: inline-block;
+  vertical-align: middle;
+  &.icon-home-w {
+    background-image: url(~assets/images/home-icon-w.png);
+  }
+  &.icon-pim-w {
+    background-image: url(~assets/images/pim-icon-w.png);
+  }
+  &.icon-recruitment-w {
+    background-image: url(~assets/images/recruitment-icon-w.png);
+  }
+  &.icon-leave-w {
+    background-image: url(~assets/images/leave-icon-w.png);
+  }
+  &.icon-admin-w {
+    background-image: url(~assets/images/admin-icon-w.png);
+  }
+}
 
 .oxd-topbar {
   position: relative;

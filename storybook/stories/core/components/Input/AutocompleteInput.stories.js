@@ -104,6 +104,13 @@ export default {
         type: {summary: 'Interal Slot to manage option'},
       },
     },
+    topOfInput: {
+      control: {type: 'object'},
+      defaultValue: [],
+      table: {
+        type: {summary: 'A slot which renders an inline label above the input'},
+      },
+    },
     createOptions: {
       control: {type: 'function'},
       table: {
@@ -144,6 +151,29 @@ const options = [
 const syncFunction = function (serachParam) {
   const filter = new RegExp(serachParam, 'i');
   return options.filter((item) => item.label.match(filter));
+};
+
+const syncFunctionWithSelectedOptions = function (searchParam, selectedOptions) {
+  // Filter out already selected options to demonstrate the new feature
+  let availableOptions = options;
+
+  if (selectedOptions) {
+    if (Array.isArray(selectedOptions)) {
+      availableOptions = options.filter(option => 
+        !selectedOptions.some(selected => selected.id === option.id)
+      );
+    } else {
+      availableOptions = options.filter(option => option.id !== selectedOptions.id);
+    }
+  }
+
+  // Apply search filter
+  if (searchParam) {
+    const filter = new RegExp(searchParam, 'i');
+    return availableOptions.filter((item) => item.label.match(filter));
+  }
+
+  return availableOptions;
 };
 
 const asyncFunction = async function (serachParam) {
@@ -438,6 +468,79 @@ Events.parameters = {
         '</div>\n' +
         '//\n' +
         'File -> AutoCompleteEvents.story.vue',
+    },
+  },
+};
+
+
+export const WithSelectedOptionsFilter = Template.bind({});
+WithSelectedOptionsFilter.args = {
+  createOptions: syncFunctionWithSelectedOptions,
+  multiple: true,
+};
+
+WithSelectedOptionsFilter.parameters = {
+  docs: {
+    source: {
+      code:
+        '<oxd-auto-complete \n  :multiple="true" \n :createOptions="syncFunctionWithSelectedOptions" />\n' +
+        '        const syncFunctionWithSelectedOptions = function (searchParam, selectedOptions) {\n' +
+        '          // Filter out already selected options to demonstrate the new feature\n' +
+        '          let availableOptions = options;\n' +
+        '          \n' +
+        '          if (selectedOptions) {\n' +
+        '            if (Array.isArray(selectedOptions)) {\n' +
+        '              availableOptions = options.filter(option => \n' +
+        '                !selectedOptions.some(selected => selected.id === option.id)\n' +
+        '              );\n' +
+        '            } else {\n' +
+        '              availableOptions = options.filter(option => option.id !== selectedOptions.id);\n' +
+        '            }\n' +
+        '          }\n' +
+        '          \n' +
+        '          // Apply search filter\n' +
+        '          if (searchParam) {\n' +
+        '            const filter = new RegExp(searchParam, "i");\n' +
+        '            return availableOptions.filter((item) => item.label.match(filter));\n' +
+        '          }\n' +
+        '          \n' +
+        '          return availableOptions;\n' +
+        '        }',
+    },
+  },
+};
+
+export const WithInlineLabel = (args) => ({
+  setup() {
+    const selected = ref();
+    return {args, selected};
+  },
+  render() {
+    return h(AutocompleteInput, {
+      ...this.args,
+      modelValue: this.selected,
+      'onUpdate:modelValue': (value) => {
+        this.selected = value;
+      },
+    }, {
+      topOfInput: () => h('span', {style: 'font-size: 12px; color: #666;'}, 'Role'),
+    });
+  },
+});
+
+WithInlineLabel.args = {
+  createOptions: syncFunction,
+};
+
+WithInlineLabel.parameters = {
+  docs: {
+    source: {
+      code:
+        '<oxd-autocomplete-input \n  :createOptions="syncFunction">\n' +
+        '  <template v-slot:topOfInput>\n' +
+        '    <span>Role</span>\n' +
+        '  </template>\n' +
+        '</oxd-autocomplete-input>',
     },
   },
 };

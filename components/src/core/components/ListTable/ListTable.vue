@@ -33,8 +33,9 @@
             v-if="header.iconName"
             :name="header.iconName"
             :style="header.iconStyle"
+            :tooltip="$vt(header.title)"
           />
-          <span :tooltip="$vt(header.title)" v-else>
+          <span v-if="header.title" :tooltip="$vt(header.title)">
             <p class="oxd-table-th-txt">{{ $vt(header.title) }}</p>
           </span>
         </oxd-card-th>
@@ -151,6 +152,15 @@ export default defineComponent({
       type: Object as PropType<CardSelector>,
       default: () => ({}),
     },
+    selectionMode: {
+      type: String as PropType<'index' | 'property'>,
+      default: 'index',
+      validator: (value: string) => ['index', 'property'].includes(value),
+    },
+    selectionProperty: {
+      type: String,
+      default: 'id',
+    },
     headers: {
       type: Array as PropType<CardHeaders>,
       default: () => [],
@@ -161,6 +171,10 @@ export default defineComponent({
     },
     flashRows: {
       type: Array as PropType<number[]>,
+      default: () => [],
+    },
+    flashIgnoreKeys: {
+      type: Array as PropType<string[]>,
       default: () => [],
     },
     skeleton: {
@@ -204,21 +218,49 @@ export default defineComponent({
       },
     );
 
+    const isItemSelectable = (item: RowItem): boolean => {
+      return (
+        item?.isSelectable !== false &&
+        item?.isDisabled !== true &&
+        item?.isRowDisabled !== true &&
+        item?.isSelectDisabled !== true
+      );
+    };
+
+    const areAllItemsSelected = (
+      selectedItems: Array<number>,
+      allItems: Array<RowItem>,
+    ) => {
+      const selectableItems = allItems.filter(isItemSelectable);
+
+      if (selectableItems.length === 0) return false;
+
+      let selectedCount = 0;
+      for (const item of selectableItems) {
+        const itemValue = item[props.selectionProperty];
+        if (selectedItems.includes(itemValue)) selectedCount++;
+      }
+
+      return selectedCount === selectableItems.length;
+    };
+
     const getCheckIcon = (
       selectedItems: Array<number>,
       allItems: Array<RowItem>,
     ) => {
-      return allItems.filter(
-        (item: RowItem) =>
-          item?.isSelectable !== false && item?.isDisabled !== true,
-      ).length === selectedItems.length
+      if (props.selectionMode === 'property') return 'oxd-check';
+      return allItems.filter(isItemSelectable).length === selectedItems.length
         ? 'oxd-check'
         : 'dash';
     };
 
     const selectAll = computed({
       get: () => {
-        return props.selected.length > 0;
+        if (props.selectionMode === 'property') {
+          return areAllItemsSelected(props.selected, props.items);
+        } else {
+          return props.selected.length > 0;
+        }
       },
       set: value => {
         if (value) {
@@ -237,6 +279,7 @@ export default defineComponent({
       }
       return props.headers;
     });
+
     const cardHeaders = computed(() => {
       if (props.selectable || (props.loading && props.skeleton)) {
         return [
@@ -296,6 +339,16 @@ export default defineComponent({
     });
 
     const allSelectDisabled = computed(() => {
+      // For property-based selection, we need to check if all items have the selectionProperty
+      if (props.selectionMode === 'property') {
+        return computedItems.value.every(
+          item =>
+            item.isSelectDisabled === true ||
+            item[props.selectionProperty] === undefined,
+        );
+      }
+
+      // Original behavior for index-based selection
       return computedItems.value.every(item => item.isSelectDisabled === true);
     });
 

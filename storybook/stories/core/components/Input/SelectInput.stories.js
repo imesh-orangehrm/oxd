@@ -3,6 +3,7 @@ import SelectInputEvents from './SelectInputEvents.story.vue';
 import SelectInputAfterSelect from './SelectInputAfterSelect.story.vue';
 import {h, ref} from 'vue';
 import SelectInputCustomSelectStory from './SelectInputCustomSelect.story.vue';
+import SelectInputTopOfInputStory from './SelectInputTopOfInput.story.vue';
 
 export default {
   title: 'Inputs/SelectInput',
@@ -33,6 +34,27 @@ export default {
       defaultValue: [],
       table: {
         type: {summary: 'Set options for select'},
+      },
+    },
+    translateOptions: {
+      control: {type: 'boolean'},
+      defaultValue: true,
+      table: {
+        type: {summary: 'Translate options'},
+      },
+    },
+    forceDropdownPosition: {
+      control: {type: 'boolean'},
+      defaultValue: false,
+      table: {
+        type: {summary: 'Force the dropdown position'},
+      },
+    },
+    scrollToOption: {
+      control: {type: 'object'},
+      defaultValue: null,
+      table: {
+        type: {summary: 'Scroll to a specific option when dropdown opens'},
       },
     },
     'dropdown:opened': {
@@ -75,6 +97,7 @@ export default {
       defaultValue: [],
       table: {
         type: {summary: 'Interal Slot to manage option'},
+        category: 'Slots',
       },
     },
     afterSelected: {
@@ -82,6 +105,15 @@ export default {
       defaultValue: [],
       table: {
         type: {summary: 'Attend a specific text to the end of the select'},
+        category: 'Slots',
+      },
+    },
+    topOfInput: {
+      control: {type: 'text'},
+      defaultValue: '',
+      table: {
+        type: {summary: 'Inline label displayed above the input content'},
+        category: 'Slots',
       },
     },
     isLoading: {
@@ -134,6 +166,18 @@ const options = [
     id: 10,
     label: 'Senior Executive',
   },
+  {
+    id: 11,
+    label: 'Software Engineer',
+  },
+  {
+    id: 12,
+    label: 'Sales Manager',
+  },
+  {
+    id: 13,
+    label: 'System Administrator',
+  },
 ];
 
 const Template = (args) => ({
@@ -142,13 +186,20 @@ const Template = (args) => ({
     return {args, selected};
   },
   render() {
+    const slots = {};
+    
+    // Add topOfInput slot if provided
+    if (this.args.topOfInput) {
+      slots.topOfInput = () => this.args.topOfInput;
+    }
+    
     return h(SelectInput, {
       ...this.args,
       modelValue: this.selected,
       'onUpdate:modelValue': (value) => {
         this.selected = value;
       },
-    });
+    }, slots);
   },
 });
 
@@ -337,11 +388,76 @@ CustomTemplate.parameters = {
   docs: {
     source: {
       code:
-      ' <oxd-select :options="options" v-model="value">\n' +
+        ' <oxd-select :options="options" v-model="value">\n' +
         '<template v-slot:option> (Github ID) </template> \n' +
         '</oxd-select>"\n' +
         '//\n' +
         'File -> SelectInputCustomSelect.story.vue',
+    },
+  },
+};
+
+export const TopOfInputCustom = () => SelectInputTopOfInputStory;
+
+TopOfInputCustom.parameters = {
+  docs: {
+    source: {
+      code:
+        '<oxd-select :options="options" v-model="value">\n' +
+        '<template v-slot:topOfInput>\n' +
+        '  <span class="top-of-input-label">Location</span>\n' +
+        '</template>\n' +
+        '</oxd-select>\n\n',
+    },
+  },
+};
+
+export const ForceDropdownPosition = Template.bind({});
+ForceDropdownPosition.args = {
+  options: options,
+  forceDropdownPosition: true,
+  dropdownPosition: 'top',
+  style: {
+    marginTop: '200px',
+  },
+};
+
+ForceDropdownPosition.parameters = {
+  docs: {
+    source: {
+      code:
+        '<oxd-select \n' +
+        ' :options=' +
+        JSON.stringify(options) +
+        '\n' +
+        ' :forceDropdownPosition="true"\n' +
+        ' dropdownPosition="top"\n' +
+        ' :style="{ marginTop: \'200px\' }"\n' +
+        '/>',
+    },
+  },
+};
+
+export const ScrollToOption = Template.bind({});
+ScrollToOption.args = {
+  options: options,
+  scrollToOption: {
+    id: 6,
+    label: 'Assistant Manager',
+  },
+};
+
+ScrollToOption.parameters = {
+  docs: {
+    source: {
+      code:
+        '<oxd-select \n' +
+        ' :options=' +
+        JSON.stringify(options) +
+        '\n' +
+        ' :scrollToOption="{ id: 6, label: \'Assistant Manager\' }"\n' +
+        '/>\n' +
+        '// When dropdown opens, it will scroll to "Assistant Manager" option',
     },
   },
 };

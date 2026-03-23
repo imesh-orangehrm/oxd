@@ -1,20 +1,36 @@
 <template>
   <div :class="classes">
-    <div class="oxd-autocomplete-text-input--before">
-      <slot name="beforeInput"></slot>
+    <!-- Inline label slot -->
+    <div
+      v-if="$slots.topOfInput"
+      class="oxd-autocomplete-text-input--inline-label"
+    >
+      <slot name="topOfInput"></slot>
     </div>
-    <input
-      @focus="onFocus"
-      @blur="onBlur"
-      data-test="autocompleteSelect"
-      v-bind="$attrs"
-      :disabled="disabled"
-      :readonly="readonly"
-      :placeholder="placeholder"
-      @keyup.page-down="onPageDown"
-      @keyup.page-up="onPageUp"
-      :style="style"
-    />
+
+    <div
+      class="oxd-autocomplete-text-input--input-wrapper"
+      :class="{
+        'oxd-autocomplete-text-input--has-inline-label': $slots.topOfInput,
+      }"
+    >
+      <div class="oxd-autocomplete-text-input--before">
+        <slot name="beforeInput"></slot>
+      </div>
+      <input
+        @focus="onFocus"
+        @blur="onBlur"
+        data-test="autocompleteSelect"
+        v-bind="$attrs"
+        :disabled="disabled"
+        :readonly="readonly"
+        :placeholder="placeholder"
+        @keyup.page-down="onPageDown"
+        @keyup.page-up="onPageUp"
+        :style="style"
+      />
+    </div>
+
     <div class="oxd-autocomplete-text-input--after">
       <slot name="afterInput"></slot>
       <oxd-icon
@@ -111,6 +127,9 @@ export default defineComponent({
 
     onPageUp(e: KeyboardEvent) {
       (e.target as HTMLInputElement).setSelectionRange(0, 0);
+    },
+    onKeypress(e: KeyboardEvent) {
+      return;
     },
   },
 });

@@ -15,6 +15,9 @@
       @keydown.down.exact.prevent="onSelectDown"
       @keydown.up.exact.prevent="onSelectUp"
     >
+      <template v-if="$slots.topOfInput" v-slot:topOfInput>
+        <slot name="topOfInput"></slot>
+      </template>
       <template v-slot:beforeInput>
         <slot
           v-if="!multiple && modelValue"
@@ -66,7 +69,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import debounce from 'lodash.debounce';
+import {debounce} from 'lodash-es';
 import eventsMixin from '../Select/events-mixin';
 import navigationMixin from '../Select/navigation-mixin';
 import {TOP, BOTTOM, Option, Position, DROPDOWN_POSITIONS} from '../types';
@@ -169,7 +172,8 @@ export default defineComponent({
           }
           return {...option, _selected};
         })
-        .filter((option: Option) => !option._selected);
+        .filter((option: Option) => !option._selected)
+        .slice(0, 5);
     },
     dropdownClasses(): object {
       return {
@@ -269,7 +273,7 @@ export default defineComponent({
     doSearch() {
       new Promise(resolve => {
         if (this.createOptions) {
-          resolve(this.createOptions(this.searchTerm));
+          resolve(this.createOptions(this.searchTerm, this.modelValue));
         } else {
           throw new Error('createOptions not defined');
         }
@@ -277,7 +281,7 @@ export default defineComponent({
         this.loading = false;
         if (resolved && Array.isArray(resolved)) {
           if (resolved.length > 0) {
-            this.options = resolved.slice(0, 5);
+            this.options = resolved;
           } else {
             this.options = [];
           }
