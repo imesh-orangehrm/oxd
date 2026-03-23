@@ -721,7 +721,7 @@ export default defineComponent({
       return selectedIdsComputed.value
         .map(id => findOptionByOptionId(id, optionsArr.value))
         .filter((option): option is Option => 
-          typeof option !== 'string' && 
+            typeof option !== 'string' &&
           (props.countTopmostParents || option._level > 1)
         );
     });
@@ -773,12 +773,12 @@ export default defineComponent({
       if (props.allSelectedText && isAllSelected.value) {
         return $t(props.allSelectedText);
       }
-      
+
       const visible = visibleSelectedOptions.value;
       if (visible.length === 0) {
         return '';
       }
-      
+
       return visible.map(option => option.label).join(', ');
     });
 
@@ -804,6 +804,7 @@ export default defineComponent({
     };
 
     const onDoneButtonClick = () => {
+      if (props.disabled || props.readonly || !dropdownOpen.value) return;
       emit('dropdown:done');
       onCloseDropdown(null);
     };
@@ -871,7 +872,7 @@ export default defineComponent({
     watch(
       [selectedIdsComputed],
       () => {
-        recalculateVisible();
+      recalculateVisible();
       },
     );
 
