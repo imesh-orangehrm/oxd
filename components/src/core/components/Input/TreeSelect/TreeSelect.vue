@@ -141,7 +141,7 @@
           <div class="dropdown-footer-div">
             <div>
               <oxd-button
-                @click="onCloseDropdown(null)"
+                @click="onDoneButtonClick"
                 :label="$vt('Done')"
                 :displayType="'secondary'"
               ></oxd-button>
@@ -702,6 +702,11 @@ export default defineComponent({
       emit('dropdown:closed');
     };
 
+    const onDoneButtonClick = () => {
+      emit('dropdown:done');
+      onCloseDropdown(null);
+    };
+
     const closeDropdownOnOutsideClick = () => {
       onCloseDropdown(null);
     };
@@ -772,6 +777,7 @@ export default defineComponent({
       tabIndex,
       selectOptionOnlabelClick,
       onCloseDropdown,
+      onDoneButtonClick,
       onToggleDropdown,
       getPlaceholderValue,
       keyUpEnterOnCheckbox,
