@@ -41,16 +41,16 @@ describe('TreeSelect.vue', () => {
   beforeEach(() => {
     const originalCreateElement = document.createElement.bind(document);
     createElementSpy = jest.spyOn(document, 'createElement').mockImplementation((tagName: string) => {
-      if (tagName === 'canvas') {
+        if (tagName === 'canvas') {
         return {
-          getContext: () => ({
-            font: '',
+            getContext: () => ({
+              font: '',
             measureText: () => ({ width: 0 }),
-          }),
+            }),
         } as unknown as HTMLElement;
-      }
-      return originalCreateElement(tagName);
-    });
+        }
+        return originalCreateElement(tagName);
+      });
   });
 
   afterEach(() => {
@@ -568,6 +568,116 @@ describe('TreeSelect.vue', () => {
 
       const selectText = wrapper.findComponent({ name: 'oxd-select-text' });
       expect(selectText.props('value')).toBe('All');
+    });
+  });
+
+  describe('dropdown:done event', () => {
+    it('should emit dropdown:done when Done button is clicked', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+        },
+      });
+
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      const doneButton = wrapper.find('.dropdown-footer-div .oxd-button');
+      await doneButton.trigger('click');
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.emitted('dropdown:done')).toBeTruthy();
+      expect(wrapper.emitted('dropdown:done')?.length).toBe(1);
+    });
+
+    it('should emit dropdown:done before dropdown:closed when Done button is clicked', async () => {
+      const emitOrder: string[] = [];
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+          'onDropdown:done': () => emitOrder.push('dropdown:done'),
+          'onDropdown:closed': () => emitOrder.push('dropdown:closed'),
+        },
+      });
+
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+      emitOrder.length = 0;
+
+      const doneButton = wrapper.find('.dropdown-footer-div .oxd-button');
+      await doneButton.trigger('click');
+      await wrapper.vm.$nextTick();
+
+      expect(emitOrder).toEqual(['dropdown:done', 'dropdown:closed']);
+    });
+
+    it('should close dropdown after Done button is clicked', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+        },
+      });
+
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('.oxd-select-dropdown').exists()).toBe(true);
+
+      const doneButton = wrapper.find('.dropdown-footer-div .oxd-button');
+      await doneButton.trigger('click');
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('.oxd-select-dropdown').exists()).toBe(false);
+    });
+
+    it('should not emit dropdown:done when clicking outside', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+        },
+      });
+
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      document.body.click();
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.emitted('dropdown:done')).toBeFalsy();
+      expect(wrapper.emitted('dropdown:closed')).toBeTruthy();
+    });
+
+    it('should not emit dropdown:done when pressing Escape key', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+        },
+      });
+
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      await wrapper.find('.oxd-select-text').trigger('keyup.esc');
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.emitted('dropdown:done')).toBeFalsy();
+      expect(wrapper.emitted('dropdown:closed')).toBeTruthy();
+    });
+
+    it('should not emit dropdown:done when toggling dropdown closed', async () => {
+      const wrapper = mount(TreeSelect, {
+        props: {
+          options,
+        },
+      });
+
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      wrapper.find('.oxd-select-text').trigger('click');
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.emitted('dropdown:done')).toBeFalsy();
+      expect(wrapper.emitted('dropdown:closed')).toBeTruthy();
     });
   });
 });
