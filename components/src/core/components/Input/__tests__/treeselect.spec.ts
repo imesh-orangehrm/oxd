@@ -41,16 +41,16 @@ describe('TreeSelect.vue', () => {
   beforeEach(() => {
     const originalCreateElement = document.createElement.bind(document);
     createElementSpy = jest.spyOn(document, 'createElement').mockImplementation((tagName: string) => {
-      if (tagName === 'canvas') {
+        if (tagName === 'canvas') {
         return {
-          getContext: () => ({
-            font: '',
+            getContext: () => ({
+              font: '',
             measureText: () => ({ width: 0 }),
-          }),
+            }),
         } as unknown as HTMLElement;
-      }
-      return originalCreateElement(tagName);
-    });
+        }
+        return originalCreateElement(tagName);
+      });
   });
 
   afterEach(() => {
@@ -591,24 +591,24 @@ describe('TreeSelect.vue', () => {
     });
 
     it('should emit dropdown:done before dropdown:closed when Done button is clicked', async () => {
+      const emitOrder: string[] = [];
       const wrapper = mount(TreeSelect, {
         props: {
           options,
+          'onDropdown:done': () => emitOrder.push('dropdown:done'),
+          'onDropdown:closed': () => emitOrder.push('dropdown:closed'),
         },
       });
 
       wrapper.find('.oxd-select-text').trigger('click');
       await wrapper.vm.$nextTick();
+      emitOrder.length = 0;
 
       const doneButton = wrapper.find('.dropdown-footer-div .oxd-button');
       await doneButton.trigger('click');
       await wrapper.vm.$nextTick();
 
-      const emittedEvents = wrapper.emitted();
-      expect(emittedEvents['dropdown:done']).toBeTruthy();
-      expect(emittedEvents['dropdown:closed']).toBeTruthy();
-      expect(emittedEvents['dropdown:done']?.length).toBe(1);
-      expect(emittedEvents['dropdown:closed']?.length).toBe(1);
+      expect(emitOrder).toEqual(['dropdown:done', 'dropdown:closed']);
     });
 
     it('should close dropdown after Done button is clicked', async () => {

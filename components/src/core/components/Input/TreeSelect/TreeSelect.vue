@@ -143,7 +143,7 @@
           <div class="dropdown-footer-div">
             <div>
               <oxd-button
-                @click="onCloseDropdown(null)"
+                @click="onDoneButtonClick"
                 :label="$vt('Done')"
                 :displayType="'secondary'"
               ></oxd-button>
@@ -721,7 +721,7 @@ export default defineComponent({
       return selectedIdsComputed.value
         .map(id => findOptionByOptionId(id, optionsArr.value))
         .filter((option): option is Option => 
-          typeof option !== 'string' && 
+            typeof option !== 'string' &&
           (props.countTopmostParents || option._level > 1)
         );
     });
@@ -773,12 +773,12 @@ export default defineComponent({
       if (props.allSelectedText && isAllSelected.value) {
         return $t(props.allSelectedText);
       }
-      
+
       const visible = visibleSelectedOptions.value;
       if (visible.length === 0) {
         return '';
       }
-      
+
       return visible.map(option => option.label).join(', ');
     });
 
@@ -801,6 +801,12 @@ export default defineComponent({
       dropdownOpen.value = false;
       removeExpandedOptionsFromOptionsArrayOnDropdownClose();
       emit('dropdown:closed');
+    };
+
+    const onDoneButtonClick = () => {
+      if (props.disabled || props.readonly || !dropdownOpen.value) return;
+      emit('dropdown:done');
+      onCloseDropdown(null);
     };
 
     const closeDropdownOnOutsideClick = () => {
@@ -866,7 +872,7 @@ export default defineComponent({
     watch(
       [selectedIdsComputed],
       () => {
-        recalculateVisible();
+      recalculateVisible();
       },
     );
 
@@ -900,6 +906,7 @@ export default defineComponent({
       tabIndex,
       selectOptionOnlabelClick,
       onCloseDropdown,
+      onDoneButtonClick,
       onToggleDropdown,
       keyUpEnterOnCheckbox,
     };
